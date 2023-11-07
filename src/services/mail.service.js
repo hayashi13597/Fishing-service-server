@@ -5,19 +5,19 @@ const transporter = nodemailer.createTransport({
   service: "Gmail",
   auth: {
     user: process.env.NODEMAILER_USERNAME || "namph2102@gmail.com",
-    pass: process.env.NODEMAILER_PASSWORD || "ewkbgajwyfcydbhy",
+    pass: process.env.NODEMAILER_PASSWORD || "tatvcdfftwrtwzwb",
   },
 });
 class MailService {
-  async login() {
+  async register(email, createdAt) {
     const info = await transporter
       .sendMail({
-        from: '"Zecky.online 👻" <namanhthao58@gmail.com>', //Địa chỉ gửi
-        to: "namanhthao59@gmail.com, namanhthao58@gmail.com", //  danh sách người nhận
-        subject: "Chúc mừng gửi Mail thành công ✔", // Tiêu đề
+        from: `"${email} 👻" <adminocdao@gmail.com>`, //Địa chỉ gửi
+        to: `${email}, adminocdao@gmail.com`, //  danh sách người nhận
+        subject: "Chúc mừng thành viên mới ✔", // Tiêu đề
         text: "Hello world?", // plain text body
         html: ` <div>
-        <h1>Xin chào <strong>Phạm Hoài Nam</strong></h1>
+        <h1>Xin chào <strong>thành viên mới</strong></h1>
         <br />
         <p>
           Chúng tôi xin gửi lời chúc mừng đến bạn về việc tạo tài khoản thành công
@@ -27,9 +27,8 @@ class MailService {
         <br />
         <p>Thông tin tài khoản của bạn:</p>
         <ul>
-          <li>Tên đăng nhập: <strong>dsadsadsadsa</strong></li>
-          <li>Địa chỉ email: <strong> namph@gmail.com</strong></li>
-          <li>Ngày tạo: <strong> 20/05/2022</strong></li>
+          <li>Tài khoản: <strong> ${email}</strong></li>
+          <li>Ngày tạo: <strong> ${createdAt}</strong></li>
         </ul>
         <br />
         <p>
@@ -43,10 +42,10 @@ class MailService {
         </p>
         <div>
           <p>Trân trọng,</p>
-          <p>Phạm Hoài Nam</p>
-          <p>Công ty Trách nhiệm hữu hạn</p>
-          <p>Địa chỉ email liên hệ: namph2102@gmail.com</p>
-          <p>Số điện thoại liên hệ: 0877669990</p>
+          <p>Nguyễn Quốc Trường</p>
+          <p>Hồ câu cá Ốc đảo kỳ đà</p>
+          <p>Địa chỉ email liên hệ: adminocdao@gmail.com</p>
+          <p>Số điện thoại liên hệ: 0347.088.538</p>
         </div>
       </div>`, // Nội dung trong Email Dạng inline style
       })

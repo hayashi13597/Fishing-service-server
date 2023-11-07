@@ -7,8 +7,18 @@ Content-Type: application/json
 {
 
  "data":{
-  "email":"sdadsaads@gmail.com",
+  "email":"namanhthao59@gmail.com",
   "password":"122112122121"
  }
  
 }
+// Xác thực token
+###
+POST http://localhost:5000/user/firstlogin
+Authorization: Bearss eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJlbWFpbCI6Im5hbWFuaHRoYW81OEBnbWFpbC5jb20iLCJpYXQiOjE2OTkzNTk4NTAsImV4cCI6MTY5OTYxOTA1MH0.qj7MhQzK9YX3HyiZC4V38UFSSPnktSfSh2x1FJOmja4
+
+{
+
+ 
+}
+
