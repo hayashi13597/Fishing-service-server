@@ -3,7 +3,7 @@ const sequelize = new Sequelize("fishing", "root", null, {
   host: "localhost",
   dialect: "mysql",
   timezone: "+07:00",
-  password: "",
+
   port: 3307,
   logging: true,
 
