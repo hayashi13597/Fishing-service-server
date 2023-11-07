@@ -1,0 +1,12 @@
+GET http://localhost:5000/home 
+
+###
+POST http://localhost:5000/user
+Content-Type: : application/json
+
+{
+
+  "email":"namp@gmail.com",
+  "password":"122112122121"
+ 
+}
