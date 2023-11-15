@@ -3,14 +3,14 @@ const { Sequelize } = require("sequelize");
 const sequelize = new Sequelize(
   process.env.MYSQL_DATABASE_NAME,
   process.env.MYSQL_USERNAME,
-  process.env.MYSQL_PASSWORD,
+  process.env.MYSQL_PASSWORD || null,
 
   {
     dialect: "mysql",
     timezone: "+07:00",
     host: process.env.MYSQL_HOST,
     port: process.env.MYSQL_PORT,
-    logging: true,
+    logging: false,
   }
 );
 

@@ -1,15 +1,12 @@
 GET http://localhost:5000/home 
 
 ###
-POST http://localhost:5000/user
+POST http://localhost:5000/user/register
 Content-Type: application/json
 
 {
 
- "data":{
-  "email":"namanhthao59@gmail.com",
-  "password":"122112122121"
- }
+"dsadsa":"saddsadsa"
  
 }
 // Xác thực token

@@ -32,11 +32,7 @@ UserRouter.post("/register", MiddleWare.handleTryCate(UserController.register))
     UploadStore.single("file"),
     MiddleWare.handleTryCate(UserController.ChangeAvatar)
   )
-  .post(
-    "/resetavatar",
-
-    MiddleWare.handleTryCate(UserController.ResetAvatar)
-  )
+  .post("/resetavatar", MiddleWare.handleTryCate(UserController.ResetAvatar))
   .delete("/:userid", MiddleWare.handleTryCate(UserController.DeleteUser));
 
 export default UserRouter;

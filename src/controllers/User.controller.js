@@ -1,7 +1,7 @@
 import { DataResponse } from "../middlewares";
 
 import RedisServer from "../redis/redis.config";
-import CloudinaryServices from "../services/Cloudinary.services";
+import CloudinaryServices from "../services/cloudinary.services";
 import MailService from "../services/mail.service";
 import UserService from "../services/user/User.service";
 import Util from "../utils";
@@ -15,18 +15,20 @@ class UserController {
     }
     const account = await UserService.register(email, password, fullname);
 
-    RedisServer.publish(
-      "sendmailregister",
-      JSON.stringify({
-        email: account.email,
-        createdAt: Util.formatDate(account.createdAt),
-      })
-    );
+    // RedisServer.publish(
+    //   "sendmailregister",
+    //   JSON.stringify({
+    //     email: account.email,
+    //     createdAt: Util.formatDate(account.createdAt),
+    //   })
+    // );
 
     delete account.password;
     const data = DataResponse(account, 201, "Tạo tài khoản thành công");
+
     res.status(201).json(data);
   }
+
   async login(req, res) {
     const { username, password } = req.body.data;
     if (!username || !password) {

@@ -3,7 +3,7 @@ import UserModel from "../../models/user.model";
 
 import { DataResponse } from "../../middlewares";
 import Util from "../../utils";
-import CloudinaryServices from "../Cloudinary.services";
+import CloudinaryServices from "../cloudinary.services";
 class UserService {
   async register(email, password, fullname) {
     // kiểm tra
