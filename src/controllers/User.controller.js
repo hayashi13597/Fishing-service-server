@@ -45,6 +45,7 @@ class UserController {
     );
 
     const data = DataResponse(account, 200, "Đăng nhập thành công");
+
     res.status(200).json(data);
   }
   async FirstLogin(req, res) {
@@ -119,6 +120,33 @@ class UserController {
       res.status(200).json(data);
     } else {
       throw new Error("Thiếu dữ liệu");
+    }
+  }
+  async MissPassword(req, res) {
+    const { email } = req.body.data;
+    const info = await UserService.MissPassword(email);
+    RedisServer.publish("misspassword", JSON.stringify(info));
+    await RedisServer.set(email, info.code);
+    await RedisServer.expire(email, 60 * 2);
+    const data = DataResponse(
+      "",
+      200,
+      "Vui lòng kiểm tra email để nhận mã xác thực"
+    );
+
+    res.status(200).json(data);
+  }
+  async CheckCodeMissPassword(req, res) {
+    const { code, email } = req.body.data;
+    const getCode = (await RedisServer.get(email)) || "";
+    if (!getCode) {
+      throw new Error("Mã đã hết hạn hoặc  không tồn tại");
+    } else if (getCode == code) {
+      const data = await UserService.VeryfiryOke(email);
+      res.status(200).json(data);
+      return;
+    } else {
+      throw new Error("Mã xác thực không chính xác");
     }
   }
 }

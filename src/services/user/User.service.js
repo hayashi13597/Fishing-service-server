@@ -4,6 +4,7 @@ import UserModel from "../../models/user.model";
 import { DataResponse } from "../../middlewares";
 import Util from "../../utils";
 import CloudinaryServices from "../cloudinary.services";
+import casual from "casual";
 class UserService {
   async register(email, password, fullname) {
     // kiểm tra
@@ -202,5 +203,41 @@ class UserService {
     console.log("account bị xóa", account);
     return DataResponse("account", 200, "Xóa Thành công");
   }
+  async MissPassword(email) {
+    let account = await UserModel.findOne({
+      where: { email },
+    });
+    account = Util.coverDataFromSelect(account);
+    if (account?.id) {
+      const code = casual.integer(100000, 999999);
+      return {
+        email,
+        code,
+      };
+    }
+    throw new Error("Tài khoảng không tồn tại trên hệ thống");
+  }
+  async VeryfiryOke(email) {
+    const password = await AuthServices.verifyHash("123456");
+    let account = await UserModel.update(
+      { password },
+      {
+        where: {
+          email,
+        },
+      }
+    );
+    const [isOke] = account;
+    if (!isOke) {
+      throw new Error("Tài khoản không tồn tại");
+    }
+    account = await UserModel.findOne({
+      where: {
+        email,
+      },
+    });
+    return DataResponse(account, 200, "Mật khẩu mới sẽ là `123456`");
+  }
 }
+
 export default new UserService();

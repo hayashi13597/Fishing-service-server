@@ -13,6 +13,13 @@ const subscriber = createClient({
   subscriber.subscribe("order", (message, channel) => {
     console.log(`message: ${message} with channel: ${channel}`);
   });
+
+  subscriber.subscribe("misspassword", async (message, channel) => {
+    console.log(`message: ${message} with channel: ${channel}`);
+    const { email, code } = JSON.parse(message);
+    await MailService.missPssword(email, code);
+  });
+
   subscriber.subscribe("sendmailregister", async (message, channel) => {
     console.log("--------------------------------");
 

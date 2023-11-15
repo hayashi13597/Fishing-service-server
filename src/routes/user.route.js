@@ -36,6 +36,11 @@ UserRouter.post(
     MiddleWare.handleTryCate(UserController.ChangeAvatar)
   )
   .post("/resetavatar", MiddleWare.handleTryCate(UserController.ResetAvatar))
+  .post("/misspassword", MiddleWare.handleTryCate(UserController.MissPassword))
+  .post(
+    "/verifycode",
+    MiddleWare.handleTryCate(UserController.CheckCodeMissPassword)
+  )
   .delete("/:userid", MiddleWare.handleTryCate(UserController.DeleteUser));
 
 export default UserRouter;
