@@ -13,9 +13,7 @@ class UserController {
       throw new Error("Thiếu dữ liệu");
     }
     const account = await UserService.register(email, password, fullname);
-    if (!account) {
-      throw new Error("Tài khoản tạo thất bại");
-    }
+
     delete account.password;
     const data = DataResponse(account, 201, "Tạo tài khoản thành công");
     res.status(201).json(data);
