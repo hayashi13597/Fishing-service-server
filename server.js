@@ -53,6 +53,6 @@ initRoute(app);
 app.get("/", (req, res) => {
   res.send("BACK END OKE");
 });
-app.listen(PORT, () => {
+app.listen(PORT, "0.0.0.0", () => {
   console.log("start sever PORT: ", PORT);
 });

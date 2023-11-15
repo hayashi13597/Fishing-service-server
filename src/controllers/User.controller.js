@@ -13,9 +13,13 @@ class UserController {
       throw new Error("Thiếu dữ liệu");
     }
     const account = await UserService.register(email, password, fullname);
-
+    RedisServer.publish(
+      "sendmailregister",
+      JSON.stringify({ email, createdAt: Util.formatDate(account.createdAt) })
+    );
     delete account.password;
     const data = DataResponse(account, 201, "Tạo tài khoản thành công");
+
     res.status(201).json(data);
   }
   async login(req, res) {
@@ -90,6 +94,7 @@ class UserController {
           result.path
         );
         res.status(200).json(data);
+        return;
       }
       throw new Error("Ảnh không đạt yêu cầu");
     }
