@@ -2,7 +2,7 @@ import { DataResponse } from "../middlewares";
 
 import RedisServer from "../redis/redis.config";
 import CloudinaryServices from "../services/cloudinary.services";
-import MailService from "../services/mail.service";
+
 import UserService from "../services/user/User.service";
 import Util from "../utils";
 
@@ -25,12 +25,11 @@ class UserController {
 
     delete account.password;
     const data = DataResponse(account, 201, "Tạo tài khoản thành công");
-
     res.status(201).json(data);
   }
-
   async login(req, res) {
     const { username, password } = req.body.data;
+
     if (!username || !password) {
       throw new Error("Thiếu dữ liệu");
     }
@@ -88,7 +87,7 @@ class UserController {
   async ChangeAvatar(req, res) {
     const file = req.file;
     const id = req.body.id;
-    console.log("id", id);
+
     if (id && file) {
       const { path } = req.file;
       if (path) {

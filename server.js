@@ -29,6 +29,10 @@ app.use(express.static(path.join(__dirname, "public")));
 
 //*end setting path
 
+app.use(
+  compression({ level: 6, threshold: 100 * 1000, filter: shouldCompress })
+);
+
 function shouldCompress(req, res) {
   if (req.headers["x-no-compression"]) {
     // don't compress responses with this request header
@@ -38,11 +42,12 @@ function shouldCompress(req, res) {
   // fallback to standard filter function
   return compression.filter(req, res);
 }
-app.use(
-  compression({ level: 6, threshold: 100 * 1000, filter: shouldCompress })
-);
 
 initRoute(app);
+
+app.get("/", (req, res) => {
+  res.send("Hello asdsdadsa");
+});
 app.listen(PORT, () => {
   console.log("start sever PORT: ", PORT);
 });

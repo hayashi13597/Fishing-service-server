@@ -12,8 +12,8 @@ class Util {
     return moment(createat).format("DD/MM/YYYY HH:mm:ss");
   }
   static coverDataFromSelect(data) {
-    if (!data) return {};
     data = JSON.stringify(data);
+
     return JSON.parse(data);
   }
 }
