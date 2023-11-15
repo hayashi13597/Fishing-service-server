@@ -33,11 +33,11 @@ class AccuracyPerson {
       if (accessToken) {
         // check token có trong db ko
         const account = await UserModel.findOne({
-          accessToken,
+          token: accessToken,
           blocked: false,
         });
 
-        if (account && account.permission !== "member") {
+        if (account && account.role !== "member") {
           next();
         }
       }
@@ -47,4 +47,4 @@ class AccuracyPerson {
     }
   }
 }
-export default new Authentication();
+export default new AccuracyPerson();

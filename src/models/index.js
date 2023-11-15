@@ -4,7 +4,7 @@ const sequelize = new Sequelize("fishing", "root", null, {
   dialect: "mysql",
   timezone: "+07:00",
 
-  port: 3307,
+  port: process.env.PORT_XAMMP || 3325,
   logging: true,
 
   // host: "viaduct.proxy.rlwy.net",

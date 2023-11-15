@@ -24,7 +24,10 @@ const UserModel = sequelize.define(
       type: DataTypes.STRING,
       defaultValue: "https://i.imgur.com/iOTWGLo.png",
     },
-
+    idPath: {
+      type: DataTypes.STRING,
+      defaultValue: "",
+    },
     address: {
       type: DataTypes.STRING,
       defaultValue: "",
@@ -34,6 +37,10 @@ const UserModel = sequelize.define(
       defaultValue: "",
     },
     visiable: {
+      type: DataTypes.BOOLEAN,
+      defaultValue: false,
+    },
+    blocked: {
       type: DataTypes.BOOLEAN,
       defaultValue: false,
     },

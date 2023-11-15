@@ -3,8 +3,9 @@ import UserModel from "../../models/user.model";
 
 import { DataResponse } from "../../middlewares";
 import Util from "../../utils";
+import CloudinaryServices from "../Cloudinary.services";
 class UserService {
-  async register(email, password) {
+  async register(email, password, fullname) {
     // kiểm tra
     const isAccount = await UserModel.findOne({ where: { email } });
 
@@ -20,6 +21,7 @@ class UserService {
     // thềm vào database
     const account = await UserModel.create({
       email,
+      fullname,
       password: passwordHash,
       accessToken,
       refreshToken,
@@ -129,6 +131,74 @@ class UserService {
     } else {
       return DataResponse("", 400, "Mật khẩu không chính xác");
     }
+  }
+  async UpdateProfile(id, profiledata) {
+    const account = await UserModel.update(profiledata, {
+      where: {
+        id,
+      },
+    });
+
+    return DataResponse(account, 200, "Cập nhập hồ sơ thành công");
+  }
+  async ChangePassword(id, { oldPassword, newPassword }) {
+    let account = await UserModel.findOne({
+      where: {
+        id,
+      },
+    });
+    account = Util.coverDataFromSelect(account);
+    const isMatch = await AuthServices.verifyHash(
+      account.password,
+      oldPassword
+    );
+    if (!isMatch) {
+      throw new Error("Mật khẩu cũ chưa chính xác");
+    } else {
+      const newPasswordHash = await AuthServices.genaratePassword(newPassword);
+      account = await UserModel.update(
+        { password: newPasswordHash },
+        {
+          where: {
+            id,
+          },
+        }
+      );
+      return DataResponse(account, 200, "Cập nhập mật khẩu thành công");
+    }
+  }
+  async ChangeAvatar(id, imageUrl, idPath = "") {
+    let account = await UserModel.findOne({
+      where: {
+        id,
+      },
+    });
+    account = Util.coverDataFromSelect(account);
+    if (account?.idPath) {
+      CloudinaryServices.deleteFileImage(account.idPath);
+    }
+    await UserModel.update(
+      { avatar: imageUrl, idPath },
+      {
+        where: {
+          id,
+        },
+      }
+    );
+    return DataResponse(
+      { avatar: imageUrl },
+      200,
+      "Cập nhập ảnh đại diện thành công"
+    );
+  }
+  async DeleteAccount(id) {
+    const account = await UserModel.destroy({
+      where: {
+        id,
+      },
+    });
+    console.log("account bị xóa", account);
+    return DataResponse("account", 200, "Xóa Thành công");
   }
 }
 export default new UserService();
