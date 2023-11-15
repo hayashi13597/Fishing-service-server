@@ -1,8 +1,9 @@
 import express from "express";
 import cors from "cors";
 require("dotenv").config();
-import compression from "compression";
+
 import initRoute from "./src/routes";
+import compression from "compression";
 //config redis file
 import RedisServer from "./src/redis/redis.config";
 import "./src/redis/subscribe.redis";
@@ -43,10 +44,14 @@ function shouldCompress(req, res) {
   return compression.filter(req, res);
 }
 
+app.get("/", async (req, res) => {
+  res.send("hello");
+});
+
 initRoute(app);
 
 app.get("/", (req, res) => {
-  res.send("Hello asdsdadsa");
+  res.send("BACK END OKE");
 });
 app.listen(PORT, () => {
   console.log("start sever PORT: ", PORT);

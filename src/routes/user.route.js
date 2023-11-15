@@ -18,7 +18,10 @@ export const storage = multer.diskStorage({
 
 const UploadStore = multer({ storage: storage });
 //user
-UserRouter.post("/register", MiddleWare.handleTryCate(UserController.register))
+UserRouter.post(
+  "/register",
+  MiddleWare.handleTryCate(UserController.RegisterAccount)
+)
   .put("", MiddleWare.handleTryCate(UserController.UpdateProfile)) //  cập nhập profile
   .post("/login", MiddleWare.handleTryCate(UserController.login)) // đăng nhập
   .post("/firebase", MiddleWare.handleTryCate(UserController.LoginWithFirebase)) // đăng ký đang nhâp firebase

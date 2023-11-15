@@ -7,35 +7,28 @@ import UserService from "../services/user/User.service";
 import Util from "../utils";
 
 class UserController {
-  async register(req, res) {
+  async RegisterAccount(req, res) {
     const { email, password, fullname } = req.body.data;
-
     if (!email || !password || !fullname) {
       throw new Error("Thiếu dữ liệu");
     }
     const account = await UserService.register(email, password, fullname);
-
-    // RedisServer.publish(
-    //   "sendmailregister",
-    //   JSON.stringify({
-    //     email: account.email,
-    //     createdAt: Util.formatDate(account.createdAt),
-    //   })
-    // );
-
+    if (!account) {
+      throw new Error("Tài khoản tạo thất bại");
+    }
     delete account.password;
     const data = DataResponse(account, 201, "Tạo tài khoản thành công");
     res.status(201).json(data);
   }
   async login(req, res) {
-    const { username, password } = req.body.data;
-
-    if (!username || !password) {
+    const { email, password } = req.body.data;
+    if (!email || !password) {
       throw new Error("Thiếu dữ liệu");
     }
-    const data = await UserService.Login(username, password);
+    const data = await UserService.Login(email, password);
     res.status(200).json(data);
   }
+
   async LoginWithFirebase(req, res) {
     const { uid, avatar, email, fullname } = req.body.data;
 

@@ -1,21 +1,186 @@
-GET http://localhost:5000/home 
 
-###
-POST http://localhost:5000/user/register
+@domain= http://localhost:5000
+
+###  Đăng ký tài khoản mới
+POST {{domain}}/user/register
 Content-Type: application/json
 
 {
-
-"dsadsa":"saddsadsa"
- 
+"fullname":"dsadsadas"
 }
-// Xác thực token
-###
-POST http://localhost:5000/user/firstlogin
-Authorization: Bearss eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJlbWFpbCI6Im5hbWFuaHRoYW81OEBnbWFpbC5jb20iLCJpYXQiOjE2OTkzNTk4NTAsImV4cCI6MTY5OTYxOTA1MH0.qj7MhQzK9YX3HyiZC4V38UFSSPnktSfSh2x1FJOmja4
+
+###  Đăng nhập
+POST {{domain}}/user/login
+Content-Type: application/json
 
 {
-
- 
+"data":{
+    "email":"admin@asadsa",
+    "password":"122112122121"
+}
 }
 
+###  Đăng ký và đăng nhập firebase
+POST {{domain}}/user/firebase
+Content-Type: application/json
+
+{
+"data":{
+
+    "uid":"dsadsda",
+    "avatar":"http://image.sdasda",
+    "email":"namph2102@gmail.com",//Facebook ko có email
+    "fullname":"Phạm Hoài Nam"
+}
+}
+
+
+// lấy token để đăng nhập vào admin
+###
+POST {{domain}}/user/firstlogin
+Authorization: Bearss eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJlbWFpbCI6Im5hbWFuaHRoYW81OEBnbWFpbC5jb20iLCJpYXQiOjE2OTkzNTk4NTAsImV4cCI6MTY5OTYxOTA1MH0.qj7MhQzK9YX3HyiZC4V38UFSSPnktSfSh2x1FJOmja4
+
+
+###  Thay đổi mật khẩu
+POST {{domain}}/user/changepassword
+Content-Type: application/json
+
+{
+"data":{
+    "username":"dsadsda",
+    "oldPassword":"1234567",
+    "newPassword":"123456",
+}
+}
+
+###  Xác thực tài khoản quên mật khẩu
+POST {{domain}}/user/verify
+Content-Type: application/json
+
+{
+"data":{
+   
+    "email":"admin@gmail.com",
+ 
+}
+}
+
+###  Cập nhập tài khoản
+PUT {{domain}}/user
+Content-Type: application/json
+
+{
+"data":{
+    "email":"admin@gmail.com",
+    "fullname":"1234567",
+    "phone":"0844669990",
+    "address":"Dường hồ chí minh",
+}
+}
+
+###  Cập nhập ảnh đại diện
+PUT {{domain}}/user
+Content-Type: application/json
+
+{
+"data":{
+    "username":"admin@gmail.com",
+    "avatar":"http://image.sdasda",
+}
+}
+
+//-----------------------------------------------------------------------------------------------------------------------------------------------------------------
+
+// coi trên link :https://dbdiagram.io/d/65462d377d8bbd646579a7d0;
+// limk website: https://fishing-services.vercel.app/
+###  Đơn hàng mua hàng
+POST {{domain}}/order
+Content-Type: application/json
+
+{
+ "order":{
+   "user_id":"xasxsxsxs",// user_id là di của tài khoảng  order
+   "address":"xxx",// địa chỉ nhận hàng
+   "discount_id":"xxx",// discount_id  là id của mã giảm giá có thể có hoặc ko => lúc người dùng nhập sẽ có api gửi lên để check mã đó tồn tại hay ko nha
+   "fullname":"xxx",// Tên người nhận
+   "paymentMethod":"Ví điện tử",//"Ví diện tử" || "COD" ||"Internet Banking"
+   "phone":"xxx",
+   "shipment":25000,// tiền ship 25000 hoặc là 0 ngàn
+ },
+ "order_detail":[
+    {"id":"xx1","quantity":4},//id là id của product
+    {"id":"xx2","quantity":4},
+ ]
+
+}
+
+## lấy dữ liệu của tài khoản khi đăng nhập , đăng ký,login với token trường nào ko có thì để "" hoặc là  []
+###  Thông tin tài khoảng
+{
+    "data":{
+        "user":{
+          "id":"xxx",
+          "fullname":"xxx",
+          "email":"xxx",
+          "address":"xxx",
+          "role":"xxx",
+          "avatar":"xxx",
+          "createAT":"xxx",
+          "updatedAt":"xxx",
+          "token":"xxx",
+        },
+        "notice":[  // danh sách thông báo 
+        {
+          "title":"xxx",
+          "content":"xxx",
+        }
+        ],
+        "order":[ // danh sách các đơn hàng đã đặt
+        {
+          "id":"xxx", // mã đơn hàng
+          "fullname":"xxx",
+          "address":"xxx",
+          "discount_id":"1232", //discount_id là di của  đơn hàng chi tiết
+          "address":"xxx",
+          "shipment":"phương thức thanh toán",
+          "createAt":"xxx",
+          "updatedAt":"xxx",
+          "status":1,// 1	Chờ xử lý 2	Đã kiểm duyệt 3	Đang giao hàng 4	thành công	5	thất bại	
+         "shipment":0,
+        }
+        ]
+        
+    }
+  
+}
+
+// khi anh click vào chi tiết đơn hàng thì em trả cho anh đơn hàng chi tiet
+
+
+POST {{domain}}/orderdetail
+Content-Type: application/json
+
+{
+    "order_detail":"string" //id đơn hnang2 chi tiết
+}
+
+
+# server trả về mảng sản phẩm có trong order đó khi xem sản phẩm chi tiết
+
+{
+    "data":
+   [
+      {
+         "id":"xxx",// mã sản phẩm
+         "name":"xxx",// tên sản phẩm
+         "quantity":5, // số luong
+         "price":1000, // giá
+         "imageUrl":"/d/sadsa",
+         "description":"sdsasa dsa sadsa" // mô tả sản phẩm
+
+     }
+    ]
+}
+###
+DELETE {{domain}}/user/1
+Content-Type: application/json

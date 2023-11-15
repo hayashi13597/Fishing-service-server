@@ -28,7 +28,7 @@ class UserService {
     });
 
     // trả về
-    return account;
+    return Util.coverDataFromSelect(account);
   }
   async loginWithFirebase(uid, avatar, email, fullname) {
     email = email || `${uid}@gmail.com`;
@@ -118,8 +118,10 @@ class UserService {
     let account = await UserModel.findOne({
       where: { email },
     });
+
     account = Util.coverDataFromSelect(account);
-    if (!account.password) {
+
+    if (!account || !account.password) {
       throw new Error("Tài khoản không tồn tại");
     }
     const isCheckPassword = await AuthServices.verifyHash(
