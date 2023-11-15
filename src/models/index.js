@@ -1,21 +1,19 @@
+require("dotenv").config();
 const { Sequelize } = require("sequelize");
-const sequelize = new Sequelize("fishing", "root", null, {
-  host: "localhost",
-  dialect: "mysql",
-  timezone: "+07:00",
+const sequelize = new Sequelize(
+  process.env.MYSQL_DATABASE_NAME,
+  process.env.MYSQL_USERNAME,
+  process.env.MYSQL_PASSWORD,
 
-  port: process.env.PORT_XAMMP || 3325,
-  logging: true,
+  {
+    dialect: "mysql",
+    timezone: "+07:00",
+    host: process.env.MYSQL_HOST,
+    port: process.env.MYSQL_PORT,
+    logging: true,
+  }
+);
 
-  // host: "viaduct.proxy.rlwy.net",
-  // dialect: "mysql",
-  // timezone: "+07:00",
-  // username: "root",
-  // password: "EA-53aCCG4Eb3FFE431D5b1H14de3dB4",
-  // database: "railway",
-  // port: 14107,
-  // logging: true,
-});
 async function connectDataBase() {
   try {
     await sequelize.authenticate();

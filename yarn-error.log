@@ -1,5 +1,5 @@
 Arguments: 
-  C:\Program Files\nodejs\node.exe C:\Users\VIP\AppData\Roaming\npm\node_modules\yarn\bin\yarn.js add cookieParser
+  C:\Program Files\nodejs\node.exe C:\Users\VIP\AppData\Roaming\npm\node_modules\yarn\bin\yarn.js dev
 
 PATH: 
   C:\Windows\system32;C:\Windows;C:\Windows\System32\Wbem;C:\Windows\System32\WindowsPowerShell\v1.0\;C:\Windows\System32\OpenSSH\;C:\Program Files\Git\cmd;C:\Program Files\dotnet\;C:\Program Files\Microsoft SQL Server\150\Tools\Binn\;C:\Program Files\Microsoft SQL Server\Client SDK\ODBC\170\Tools\Binn\;C:\Program Files (x86)\Windows Kits\10\Windows Performance Toolkit\;C:\xampp\php;C:\ProgramData\ComposerSetup\bin;C:\Users\VIP\AppData\Roaming\nvm;C:\Program Files\nodejs;C:\Users\VIP\AppData\Local\Microsoft\WindowsApps;C:\Users\VIP\AppData\Local\Programs\Microsoft VS Code\bin;C:\Users\VIP\AppData\Roaming\npm;C:\Users\VIP\.dotnet\tools;C:\Users\VIP\AppData\Roaming\Composer\vendor\bin;C:\Users\VIP\AppData\Roaming\nvm;C:\Program Files\nodejs
@@ -14,17 +14,12 @@ Platform:
   win32 x64
 
 Trace: 
-  Error: https://registry.yarnpkg.com/cookieParser: Not found
-      at params.callback [as _callback] (C:\Users\VIP\AppData\Roaming\npm\node_modules\yarn\lib\cli.js:66145:18)
-      at self.callback (C:\Users\VIP\AppData\Roaming\npm\node_modules\yarn\lib\cli.js:140890:22)
-      at Request.emit (node:events:514:28)
-      at Request.<anonymous> (C:\Users\VIP\AppData\Roaming\npm\node_modules\yarn\lib\cli.js:141862:10)
-      at Request.emit (node:events:514:28)
-      at IncomingMessage.<anonymous> (C:\Users\VIP\AppData\Roaming\npm\node_modules\yarn\lib\cli.js:141784:12)
-      at Object.onceWrapper (node:events:628:28)
-      at IncomingMessage.emit (node:events:526:35)
-      at endReadableNT (node:internal/streams/readable:1359:12)
-      at process.processTicksAndRejections (node:internal/process/task_queues:82:21)
+  SyntaxError: D:\backendfishing\package.json: Unexpected token } in JSON at position 284
+      at JSON.parse (<anonymous>)
+      at C:\Users\VIP\AppData\Roaming\npm\node_modules\yarn\lib\cli.js:1629:59
+      at Generator.next (<anonymous>)
+      at step (C:\Users\VIP\AppData\Roaming\npm\node_modules\yarn\lib\cli.js:310:30)
+      at C:\Users\VIP\AppData\Roaming\npm\node_modules\yarn\lib\cli.js:321:13
 
 npm manifest: 
   {
@@ -35,7 +30,8 @@ npm manifest:
     "author": "\"Hoài Nam\"",
     "license": "MIT",
     "scripts": {
-      "dev": "nodemon --exec babel-node server.js"
+      "dev": "nodemon --exec babel-node server.js",
+      "start": "nodemon --exec babel-node server.js",
     },
     "dependencies": {
       "@babel/core": "^7.22.10",
