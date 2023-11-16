@@ -1,4 +1,3 @@
-import Utils from "../utils";
 import sequelize from "./index";
 import { DataTypes } from "sequelize";
 import UserModel from "./user.model";

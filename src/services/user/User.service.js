@@ -76,11 +76,21 @@ class UserService {
   async loginWithFirebase(uid, avatar, email, fullname) {
     email = email || `${uid}@gmail.com`;
     // kiểm tra
-    const isAccount = await UserModel.findOne({
+    let account = await UserModel.findOne({
       where: { uid },
     });
-
-    if (isAccount) return isAccount;
+    account = Util.coverDataFromSelect(account);
+    const notices = await NoticeModal.findAll(
+      {
+        where: {
+          user_id: {
+            [Op.or]: [account.id, "all"],
+          },
+        },
+      },
+      { limit: 10, order: '"updatedAt" DESC' }
+    );
+    if (account?.id) return { account, notices };
 
     // tạo token
     const [accessToken, refreshToken, password] = await Promise.all([
@@ -90,7 +100,7 @@ class UserService {
     ]);
 
     // thềm vào database
-    const account = await UserModel.create({
+    account = await UserModel.create({
       email,
       avatar,
       fullname,
@@ -100,16 +110,6 @@ class UserService {
       password,
     });
 
-    const notices = await NoticeModal.findAll(
-      {
-        where: {
-          receiver_id: {
-            [Op.or]: [account.id, "all"],
-          },
-        },
-      },
-      { limit: 10, order: '"updatedAt" DESC' }
-    );
     delete account.password;
 
     // trả về

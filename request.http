@@ -184,3 +184,138 @@ Content-Type: application/json
 ###
 DELETE {{domain}}/user/1
 Content-Type: application/json
+
+
+
+//------------------------------------------------ Danh mục--------------------------------------------------------------
+
+
+
+### Lấy tất cả danh much
+GET {{domain}}/cate
+
+### Lấy 1 danh much
+GET {{domain}}/cate/3
+### Tạo danh mục
+POST {{domain}}/cate
+Content-Type: application/json
+
+{
+   "data":  {
+    "user_id": "2",
+    "name": "Phạm hoài nam",
+    "description": "oke quá oke",
+    "imageUrl": "",
+    "idPath": "222"
+   }
+}
+### Chỉnh sửa danh mục sửa các trường theo bảng dbdram là dc id bắt buoc
+PUT {{domain}}/cate
+Content-Type: application/json
+
+{
+   "data":  {
+    "id": "1",
+    "name": "Phạm hoài nam 2",
+    "description": "oke quá oke 1"
+   }
+}
+
+### Xóa danh much5
+DELETE  {{domain}}/cate/1
+
+
+//------------------------------------------------ Sản phẩm---------------------------------------------------------------
+
+
+### Lấy tất cả sản phẩm
+GET {{domain}}/product
+
+### Lấy 1 sản phẩm
+GET {{domain}}/product/quan-jean
+### Tạo  sản phẩm
+POST {{domain}}/product
+Content-Type: application/json
+
+{
+   "data":  {
+     "category_id":"3",
+     "user_id":"2",
+     "idPath":"san-pham",
+     "price":35000,
+     "name":"Quần Jean",
+     "imageUrl":"/asdsada/dsadsa/saddsa",
+    "listSubimages":"[]",
+    "description":"Quần ngon lám",
+    "selloff":"0"
+   }
+}
+### Chỉnh sửa  sản phẩm
+PUT {{domain}}/product
+Content-Type: application/json
+
+{
+   "data":  {
+    "id": 2,
+
+    "description": "oke quá oke 1"
+   }
+}
+
+### Xóa  sản phẩm
+DELETE  {{domain}}/product/1
+
+//------------------------------------------------Mã giảm giá---------------------------------------------------------------
+
+
+###
+GET  {{domain}}/discount
+###//thêm
+POST  {{domain}}/discount
+Content-Type: application/json
+
+{
+   "data":  {
+    "value": 0,
+    "user_id": 2
+   }
+}
+###
+DELETE   {{domain}}/discount/12
+
+### chỉnh sửa trang thái mã giảm giá
+PUT  {{domain}}/discount
+Content-Type: application/json
+
+{
+   "data":  {
+    "id":"15",
+    "value": "126"
+
+   }
+}
+
+### KIỆM TRA MÃ
+POST   {{domain}}/discount/verify
+Content-Type: application/json
+
+{
+   "data":  {
+    "code": "56806105"
+
+   }
+}
+
+
+
+//------------------------------------------------ order ---------------------------------------------------------------### KIỆM TRA MÃ
+###
+GET   {{domain}}/order
+Content-Type: application/json
+
+{
+   "data":  {
+    "code": "56806105"
+
+   }
+}
