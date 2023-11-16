@@ -5,13 +5,31 @@ import { DataResponse } from "../../middlewares";
 import Util from "../../utils";
 import CloudinaryServices from "../cloudinary.services";
 import casual from "casual";
+import NoticeModal from "../../models/notice.model";
+import { Op } from "sequelize";
+
+const CreateNotice = async ({
+  title = "",
+  content = "",
+  receiver_id,
+  user_id,
+  isSee = true,
+}) => {
+  await NoticeModal.create({
+    title,
+    content,
+    receiver_id,
+    user_id,
+    isSee,
+  });
+};
 class UserService {
   async register(email, password, fullname) {
     // kiểm tra
     const isAccount = await UserModel.findOne({ where: { email } });
 
     if (isAccount) throw new Error("Email đã được đăng ký");
-
+    console.log("isAccount", isAccount);
     // tạo token
     const [accessToken, refreshToken, passwordHash] = await Promise.all([
       AuthServices.genarationToken({ email: email }),
@@ -20,7 +38,7 @@ class UserService {
     ]);
 
     // thềm vào database
-    const account = await UserModel.create({
+    let account = await UserModel.create({
       email,
       fullname,
       password: passwordHash,
@@ -28,8 +46,32 @@ class UserService {
       refreshToken,
     });
 
+    account = Util.coverDataFromSelect(account);
+
+    await CreateNotice({
+      title: "Thông báo đăng ký tài khoản",
+      content:
+        "Chúc mừng thành viên mới gia nhập vào câu lạc bộ câu cá Ốc đảo!",
+      receiver_id: account.id,
+      user_id: account.id,
+      isSee: true,
+    });
+
+    const notices = await NoticeModal.findAll(
+      {
+        where: {
+          receiver_id: {
+            [Op.or]: [account.id, "all"],
+          },
+        },
+      },
+      { limit: 10, order: '"updatedAt" DESC' }
+    );
     // trả về
-    return Util.coverDataFromSelect(account);
+    return {
+      account,
+      notices: notices,
+    };
   }
   async loginWithFirebase(uid, avatar, email, fullname) {
     email = email || `${uid}@gmail.com`;
@@ -41,9 +83,10 @@ class UserService {
     if (isAccount) return isAccount;
 
     // tạo token
-    const [accessToken, refreshToken] = await Promise.all([
+    const [accessToken, refreshToken, password] = await Promise.all([
       AuthServices.genarationToken({ email }),
       AuthServices.genarationToken({ email }, false),
+      AuthServices.genaratePassword("123456"),
     ]);
 
     // thềm vào database
@@ -54,11 +97,23 @@ class UserService {
       accessToken,
       uid,
       refreshToken,
+      password,
     });
+
+    const notices = await NoticeModal.findAll(
+      {
+        where: {
+          receiver_id: {
+            [Op.or]: [account.id, "all"],
+          },
+        },
+      },
+      { limit: 10, order: '"updatedAt" DESC' }
+    );
     delete account.password;
 
     // trả về
-    return account;
+    return { account, notices: notices };
   }
 
   async FirstLogin(accessToken) {
@@ -111,10 +166,25 @@ class UserService {
       }
 
       delete account.password;
-      return DataResponse(account, 200, "Xác thực đăng nhập thành công");
+      const notices = await NoticeModal.findAll(
+        {
+          where: {
+            user_id: {
+              [Op.or]: [account.id, "all"],
+            },
+          },
+        },
+        { limit: 10, order: '"updatedAt" DESC' }
+      );
+      return DataResponse(
+        { account, notices },
+        200,
+        "Xác thực đăng nhập thành công"
+      );
     }
     throw new Error("Tài khoản chưa đăng nhập");
   }
+
   async Login(email, password) {
     let account = await UserModel.findOne({
       where: { email },
@@ -130,7 +200,17 @@ class UserService {
       password
     );
     if (isCheckPassword) {
-      return DataResponse(account, 200, "Đăng nhập thành công");
+      const notices = await NoticeModal.findAll(
+        {
+          where: {
+            user_id: {
+              [Op.or]: [account.id, "all"],
+            },
+          },
+        },
+        { limit: 10, order: '"updatedAt" DESC' }
+      );
+      return DataResponse({ account, notices }, 200, "Đăng nhập thành công");
     } else {
       return DataResponse("", 400, "Mật khẩu không chính xác");
     }
@@ -208,7 +288,9 @@ class UserService {
       where: { email },
     });
     account = Util.coverDataFromSelect(account);
-    if (account?.id) {
+    if (account.uid) {
+      throw new Error("Chỉ chấp nhận đổi mật khẩu khi đăng ký bằng biểu mẫu");
+    } else if (account?.id) {
       const code = casual.integer(100000, 999999);
       return {
         email,

@@ -1,6 +1,7 @@
 import Utils from "../utils";
 import sequelize from "./index";
 import { DataTypes } from "sequelize";
+import NoticeModal from "./notice.model";
 const UserModel = sequelize.define(
   "User",
   {
@@ -56,6 +57,7 @@ const UserModel = sequelize.define(
 );
 
 UserModel.sync({ alter: true });
+
 export default UserModel;
 
 // id integer [primary key]

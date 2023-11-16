@@ -12,15 +12,19 @@ class UserController {
     if (!email || !password || !fullname) {
       throw new Error("Thiếu dữ liệu");
     }
-    const account = await UserService.register(email, password, fullname);
+    const data = await UserService.register(email, password, fullname);
     RedisServer.publish(
       "sendmailregister",
-      JSON.stringify({ email, createdAt: Util.formatDate(account.createdAt) })
+      JSON.stringify({
+        email,
+        createdAt: Util.formatDate(data.account.createdAt),
+      })
     );
-    delete account.password;
-    const data = DataResponse(account, 201, "Tạo tài khoản thành công");
+    delete data.account.password;
 
-    res.status(201).json(data);
+    const dataReponsive = DataResponse(data, 201, "Tạo tài khoản thành công");
+
+    res.status(201).json(dataReponsive);
   }
   async login(req, res) {
     const { email, password } = req.body.data;
