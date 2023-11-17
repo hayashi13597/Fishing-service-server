@@ -18,7 +18,7 @@ const ProductModal = sequelize.define(
       defaultValue: 0,
     },
     description: {
-      type: DataTypes.STRING,
+      type: DataTypes.TEXT,
     },
     imageUrl: {
       type: DataTypes.STRING,
@@ -70,7 +70,10 @@ const ProductModal = sequelize.define(
   { timestamps: true, freezeTableName: true }
 );
 
-UserModel.hasMany(ProductModal, { foreignKey: "user_id", targetKey: "id" });
+UserModel.hasMany(ProductModal, {
+  foreignKey: { name: "user_id", allowNull: true },
+  targetKey: "id",
+});
 CategoryModal.hasMany(ProductModal, {
   foreignKey: "category_id",
   targetKey: "id",

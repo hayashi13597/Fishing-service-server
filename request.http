@@ -1,14 +1,19 @@
 
 @domain= http://localhost:5000
 
+###  lấy tất cả tài khoảng
+GET {{domain}}/user
+Content-Type: application/json
+
+
 ###  Đăng ký tài khoản mới
 POST {{domain}}/user/register
 Content-Type: application/json
 
 {
   "data":{
-    "fullname":"dsadsadas",
-"email":"admin@gmail.com",
+    "fullname":"Test 9",
+"email":"admin11ss23@gmail.com",
 "password":"123456"
   }
 }
@@ -329,3 +334,41 @@ Content-Type: application/json
 GET   {{domain}}/order/3
 Content-Type: application/json
 
+
+//------------------------------------------------ Event ---------------------------------------------------------------
+
+### Lấy tất cả Sự kiện
+GET {{domain}}/event
+
+### Lấy 1 Sự kiện
+GET {{domain}}/event/su-kien-khui
+### Tạo danh mục
+POST {{domain}}/event
+Content-Type: application/json
+
+{
+   "data":  {
+    "user_id": 4,
+    "title": "Sự kiện khui",
+    "description": "Cày thâu đêm cùng Dự án đã làm toang quá",
+    "imageUrl": "/assets/user-avt.png",
+    "content": "d sad sad asd sad sa dsa dsa dsa dsa",
+    "idPath":"dsadsadsa",
+    "isEvent":true  
+   
+   }
+}
+### Chỉnh sửa danh mục sửa các trường theo bảng dbdram là dc id bắt buoc
+PUT {{domain}}/event
+Content-Type: application/json
+
+{
+   "data":  {
+    "id": "1",
+    "user_id": "Phạm hoài nam 2"
+  
+   }
+}
+
+### Xóa danh much5
+DELETE  {{domain}}/cate/1

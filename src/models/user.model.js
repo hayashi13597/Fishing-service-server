@@ -36,7 +36,7 @@ const UserModel = sequelize.define(
     },
     visiable: {
       type: DataTypes.BOOLEAN,
-      defaultValue: false,
+      defaultValue: true,
     },
     role: {
       type: DataTypes.STRING,

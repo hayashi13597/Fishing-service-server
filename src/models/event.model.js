@@ -2,17 +2,23 @@ import sequelize from "./index";
 import { DataTypes } from "sequelize";
 import UserModel from "./user.model";
 
-const CategoryModal = sequelize.define(
-  "Category",
+const EventModal = sequelize.define(
+  "Event",
   {
-    name: {
+    title: {
       type: DataTypes.STRING,
+    },
+    isEvent: {
+      type: DataTypes.BOOLEAN,
+      defaultValue: false,
     },
     description: {
       type: DataTypes.TEXT,
+      allowNull: false,
     },
     imageUrl: {
       type: DataTypes.STRING,
+      allowNull: false,
     },
     idPath: {
       type: DataTypes.STRING,
@@ -20,10 +26,30 @@ const CategoryModal = sequelize.define(
     },
     slug: {
       type: DataTypes.STRING,
-      defaultValue: "",
+      unique: {
+        msg: "Sự kiện không được trùng nhau",
+      },
+      allowNull: false,
+    },
+
+    timeEvent: {
+      type: DataTypes.INTEGER,
+      defaultValue: 0,
+    },
+    views: {
+      type: DataTypes.INTEGER,
+      defaultValue: 0,
+    },
+    content: {
+      type: DataTypes.TEXT,
+      allowNull: false,
     },
     user_id: {
       type: DataTypes.INTEGER,
+      references: {
+        model: "user",
+        key: "id",
+      },
     },
     visiable: {
       type: DataTypes.BOOLEAN,
@@ -32,13 +58,18 @@ const CategoryModal = sequelize.define(
   },
   { timestamps: true, freezeTableName: true }
 );
-UserModel.hasMany(CategoryModal, { foreignKey: "user_id", targetKey: "id" });
-CategoryModal.belongsTo(UserModel, {
+UserModel.hasMany(EventModal, {
+  foreignKey: {
+    name: "user_id",
+    allowNull: false,
+  },
+  targetKey: "id",
+});
+EventModal.belongsTo(UserModel, {
   foreignKey: "user_id",
 });
-CategoryModal.sync({ alter: true });
-
-export default CategoryModal;
+EventModal.sync({ alter: true });
+export default EventModal;
 
 //   id integer [primary key]
 //   name varchar

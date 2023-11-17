@@ -8,9 +8,41 @@ import UserService from "../services/user/User.service";
 import Util from "../utils";
 
 class UserController {
-  async GeAllUserDashboard() {
-    const data = await UserModel.findAll();
-    return DataResponse({ accounts: data }, 200, "Tạo tài khoản thành công");
+  async GeAllUserDashboard(req, res) {
+    const accounts = await UserModel.findAll({
+      attributes: [
+        "id",
+        "email",
+        "fullname",
+        "avatar",
+        "role",
+        "visiable",
+        "createdAt",
+        "updatedAt",
+        "address",
+      ],
+      order: [["createdAt", "DESC"]],
+    });
+    const data = DataResponse(
+      { accounts: accounts },
+      200,
+      "Lấy danh sách tài khoảng"
+    );
+    res.status(201).json(data);
+  }
+  async ResetPassword(req, res) {
+    const { id } = req.body.data;
+    const data = await UserService.ResetPassword(id);
+    res.status(200).json(data);
+  }
+  async EditUserAdminProfile(req, res) {
+    const { id, ...profile } = req.body.data;
+    if (!id) throw new Error("Cập nhập hồ sơ thất bại");
+
+    await UserService.UpdateProfile(id, profile);
+
+    const data = DataResponse({}, 200, "Cập nhập hồ sơ thành công");
+    res.status(200).json(data);
   }
   async RegisterAccount(req, res) {
     const { email, password, fullname } = req.body.data;
@@ -122,15 +154,7 @@ class UserController {
       throw new Error("Thiếu dữ liệu");
     }
   }
-  async DeleteUser(req, res) {
-    const id = req.params.userid;
-    if (id) {
-      const data = await UserService.DeleteAccount(id);
-      res.status(200).json(data);
-    } else {
-      throw new Error("Thiếu dữ liệu");
-    }
-  }
+
   async MissPassword(req, res) {
     const { email } = req.body.data;
     const info = await UserService.MissPassword(email);
@@ -156,6 +180,15 @@ class UserController {
       return;
     } else {
       throw new Error("Mã xác thực không chính xác");
+    }
+  }
+  async DeleteUser(req, res) {
+    const id = req.params.userid;
+    if (id) {
+      const data = await UserService.DeleteAccount(id);
+      res.status(200).json(data);
+    } else {
+      throw new Error("Thiếu dữ liệu");
     }
   }
 }

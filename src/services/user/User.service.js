@@ -274,15 +274,7 @@ class UserService {
       "Cập nhập ảnh đại diện thành công"
     );
   }
-  async DeleteAccount(id) {
-    const account = await UserModel.destroy({
-      where: {
-        id,
-      },
-    });
-    console.log("account bị xóa", account);
-    return DataResponse("account", 200, "Xóa Thành công");
-  }
+
   async MissPassword(email) {
     let account = await UserModel.findOne({
       where: { email },
@@ -319,6 +311,39 @@ class UserService {
       },
     });
     return DataResponse(account, 200, "Mật khẩu mới sẽ là `123456`");
+  }
+  async ResetPassword(id) {
+    let account = await UserModel.findByPk(id);
+    account = Util.coverDataFromSelect(account);
+    if (!account?.id) {
+      throw new Error("Không tìm thấy tài khoảng");
+    }
+    const password = await AuthServices.genaratePassword("123456");
+    await UserModel.update(
+      { password },
+      {
+        where: {
+          id,
+        },
+      }
+    );
+    return DataResponse({}, 200, "Đặt mật khẩu mới thành công");
+  }
+  async DeleteAccount(id) {
+    await Promise.all([
+      NoticeModal.destroy({
+        where: {
+          user_id: id,
+        },
+      }),
+    ]);
+    const account = await UserModel.destroy({
+      where: {
+        id,
+      },
+    });
+    console.log("account bị xóa", account);
+    return DataResponse("account", 200, "Xóa Thành công");
   }
 }
 
