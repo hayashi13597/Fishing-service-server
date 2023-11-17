@@ -6,7 +6,11 @@ POST {{domain}}/user/register
 Content-Type: application/json
 
 {
-"fullname":"dsadsadas"
+  "data":{
+    "fullname":"dsadsadas",
+"email":"admin@gmail.com",
+"password":"123456"
+  }
 }
 
 ###  Đăng nhập
@@ -229,10 +233,23 @@ DELETE  {{domain}}/cate/1
 
 
 ### Lấy tất cả sản phẩm
-GET {{domain}}/product
+GET {{domain}}/product/admin
+### Lấy tất cả sản phẩm
 
+GET {{domain}}/product/admin
 ### Lấy 1 sản phẩm
-GET {{domain}}/product/quan-jean
+POST {{domain}}/product/updatesubimage
+Content-Type: application/json
+
+{
+  "data":{
+    "id":"6",
+    "idPath":"krkqf4rcsnqs2lohjnqx"
+  }
+}
+###
+POST {{domain}}/product
+Content-Type: application/json
 ### Tạo  sản phẩm
 POST {{domain}}/product
 Content-Type: application/json
@@ -245,9 +262,9 @@ Content-Type: application/json
      "price":35000,
      "name":"Quần Jean",
      "imageUrl":"/asdsada/dsadsa/saddsa",
-    "listSubimages":"[]",
-    "description":"Quần ngon lám",
-    "selloff":"0"
+      "listSubimages":"[]",
+     "description":"Quần ngon lám",
+     "selloff":"0"
    }
 }
 ### Chỉnh sửa  sản phẩm
@@ -257,7 +274,6 @@ Content-Type: application/json
 {
    "data":  {
     "id": 2,
-
     "description": "oke quá oke 1"
    }
 }
@@ -310,12 +326,6 @@ Content-Type: application/json
 
 //------------------------------------------------ order ---------------------------------------------------------------### KIỆM TRA MÃ
 ###
-GET   {{domain}}/order
+GET   {{domain}}/order/3
 Content-Type: application/json
 
-{
-   "data":  {
-    "code": "56806105"
-
-   }
-}

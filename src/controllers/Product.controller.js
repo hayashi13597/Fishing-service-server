@@ -24,6 +24,7 @@ class CategoryController {
       name,
       imageUrl,
       listSubimages,
+      visiable = true,
       description,
       selloff = 0,
     } = req.body.data;
@@ -35,6 +36,7 @@ class CategoryController {
       name,
       imageUrl,
       listSubimages,
+      visiable,
       description,
       selloff,
       slug,
@@ -50,7 +52,14 @@ class CategoryController {
     const data = await productServices.Update(id, product);
     res.status(200).json(data);
   }
-
+  async UpdateSubImage(req, res) {
+    const { id, idPath } = req.body.data;
+    if (!id || !idPath) {
+      throw new Error("Thiếu dữ liệu");
+    }
+    const data = await productServices.UpdateSubImage(id, idPath);
+    res.status(200).json(data);
+  }
   async Delete(req, res) {
     const id = req.params.id;
     const data = await productServices.Delete(id);

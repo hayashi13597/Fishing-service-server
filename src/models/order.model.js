@@ -67,11 +67,6 @@ OrderModal.belongsTo(UserModel, {
   foreignKey: { name: "user_id", allowNull: true },
   targetKey: "id",
 });
-OrderModal.hasMany(OrderDetailModal, {
-  foreignKey: "order_id",
-  targetKey: "id",
-  as: "OrderDetails",
-});
 
 OrderModal.sync({ alter: true });
 export default OrderModal;

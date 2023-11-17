@@ -27,7 +27,7 @@ const CategoryModal = sequelize.define(
     },
     visiable: {
       type: DataTypes.BOOLEAN,
-      defaultValue: false,
+      defaultValue: true,
     },
   },
   { timestamps: true, freezeTableName: true }

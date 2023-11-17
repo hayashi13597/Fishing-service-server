@@ -12,6 +12,10 @@ ProductRouter.get(
   .get("/admin", MiddleWare.handleTryCate(ProductController.GetAllAdmin))
   .get("/:slug", MiddleWare.handleTryCate(ProductController.GetOne))
   .post("/", MiddleWare.handleTryCate(ProductController.Create))
+  .post(
+    "/updatesubimage",
+    MiddleWare.handleTryCate(ProductController.UpdateSubImage)
+  )
   .put("/", MiddleWare.handleTryCate(ProductController.Update))
   .delete("/:id", MiddleWare.handleTryCate(ProductController.Delete));
 

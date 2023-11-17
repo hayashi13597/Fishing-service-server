@@ -12,13 +12,21 @@ class CategoryController {
     res.status(200).json(data);
   }
   async Create(req, res) {
-    const { user_id, name, description, imageUrl, idPath } = req.body.data;
+    const {
+      user_id,
+      name,
+      description,
+      imageUrl,
+      idPath,
+      visiable = true,
+    } = req.body.data;
     const slug = coverSlug(name);
     const data = await categoryServices.Create(user_id, {
       name,
       description,
       imageUrl,
       idPath,
+      visiable,
       slug,
     });
     res.status(201).json(data);

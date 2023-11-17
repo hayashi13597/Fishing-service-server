@@ -28,12 +28,12 @@ const ProductModal = sequelize.define(
       defaultValue: "",
     },
     listSubimages: {
-      type: DataTypes.STRING,
+      type: DataTypes.TEXT,
       defaultValue: "",
     },
     visiable: {
       type: DataTypes.BOOLEAN,
-      defaultValue: false,
+      defaultValue: true,
     },
     view: {
       type: DataTypes.INTEGER,

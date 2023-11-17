@@ -7,7 +7,8 @@ import compression from "compression";
 //config redis file
 import RedisServer from "./src/redis/redis.config";
 import "./src/redis/subscribe.redis";
-
+import multer from "multer";
+import CloudinaryServices from "./src/services/cloudinary.services";
 const path = require("path");
 // end redis file
 const app = express();
@@ -43,7 +44,51 @@ function shouldCompress(req, res) {
   // fallback to standard filter function
   return compression.filter(req, res);
 }
+// SET STORAGE
+export const storage = multer.diskStorage({
+  destination: function (req, file, cb) {
+    cb(null, path.join(__dirname, "public"));
+  },
+  filename: function (req, file, cb) {
+    cb(null, file.originalname);
+  },
+});
+// upload ảnh
 
+const UploadStore = multer({ storage: storage });
+app.post("/upload", UploadStore.single("file"), async (req, res) => {
+  try {
+    const file = req.file;
+
+    if (file) {
+      const { path } = req.file;
+      if (path) {
+        const result = await CloudinaryServices.uploadImage(path);
+        await CloudinaryServices.DeleteFileInServer(path);
+        const data = {
+          imageUrl: result.url,
+          idPath: result.path,
+        };
+        res.status(200).json(data);
+        return;
+      }
+      throw new Error("Ảnh không đạt yêu cầu");
+    }
+  } catch (error) {
+    res.status(404).json({ message: "Tải ảnh thất bại" });
+  }
+});
+app.delete("/upload/:idPath", async function (req, res) {
+  try {
+    const idPath = req.params.idPath;
+    if (idPath) {
+      await CloudinaryServices.deleteFileImage(idPath);
+    }
+    res.status(200).json("Xóa thành công");
+  } catch (err) {
+    res.status(404).json("Xóa thất bại");
+  }
+});
 app.get("/", async (req, res) => {
   res.send("hello");
 });

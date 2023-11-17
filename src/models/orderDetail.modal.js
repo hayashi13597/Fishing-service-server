@@ -39,7 +39,10 @@ ProductModal.hasOne(OrderDetailModal, {
   foreignKey: { name: "product_id", allowNull: true },
   targetKey: "id",
 });
-
+OrderModal.hasMany(OrderDetailModal, {
+  foreignKey: { name: "order_id" },
+  targetKey: "id",
+});
 OrderDetailModal.sync({ alter: true });
 export default OrderDetailModal;
 
