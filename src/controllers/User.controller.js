@@ -1,4 +1,5 @@
 import { DataResponse } from "../middlewares";
+import UserModel from "../models/user.model";
 
 import RedisServer from "../redis/redis.config";
 import CloudinaryServices from "../services/cloudinary.services";
@@ -7,6 +8,10 @@ import UserService from "../services/user/User.service";
 import Util from "../utils";
 
 class UserController {
+  async GeAllUserDashboard() {
+    const data = await UserModel.findAll();
+    return DataResponse({ accounts: data }, 200, "Tạo tài khoản thành công");
+  }
   async RegisterAccount(req, res) {
     const { email, password, fullname } = req.body.data;
     if (!email || !password || !fullname) {
