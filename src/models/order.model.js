@@ -61,11 +61,9 @@ const OrderModal = sequelize.define(
 
 OrderModal.belongsTo(DiscountModel, {
   foreignKey: { name: "discount_id", allowNull: true },
-  targetKey: "id",
 });
 OrderModal.belongsTo(UserModel, {
   foreignKey: { name: "user_id", allowNull: true },
-  targetKey: "id",
 });
 
 OrderModal.sync({ alter: true });

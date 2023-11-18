@@ -12,8 +12,8 @@ Content-Type: application/json
 
 {
   "data":{
-    "fullname":"Test 9",
-"email":"admin11ss23@gmail.com",
+    "fullname":"Phạm Hoài Nam ",
+"email":"admin@gmail.com",
 "password":"123456"
   }
 }

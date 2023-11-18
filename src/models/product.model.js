@@ -72,11 +72,9 @@ const ProductModal = sequelize.define(
 
 UserModel.hasMany(ProductModal, {
   foreignKey: { name: "user_id", allowNull: true },
-  targetKey: "id",
 });
 CategoryModal.hasMany(ProductModal, {
   foreignKey: "category_id",
-  targetKey: "id",
 });
 
 ProductModal.belongsTo(UserModel, {

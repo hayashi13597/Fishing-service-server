@@ -18,18 +18,10 @@ const OrderDetailModal = sequelize.define(
 
     product_id: {
       type: DataTypes.INTEGER,
-      references: {
-        model: "product",
-        key: "id",
-      },
     },
 
     order_id: {
       type: DataTypes.INTEGER,
-      references: {
-        model: "order",
-        key: "id",
-      },
     },
   },
   { timestamps: true, freezeTableName: true }
@@ -37,11 +29,9 @@ const OrderDetailModal = sequelize.define(
 
 ProductModal.hasOne(OrderDetailModal, {
   foreignKey: { name: "product_id", allowNull: true },
-  targetKey: "id",
 });
 OrderModal.hasMany(OrderDetailModal, {
-  foreignKey: { name: "order_id" },
-  targetKey: "id",
+  foreignKey: { name: "order_id", allowNull: true },
 });
 OrderDetailModal.sync({ alter: true });
 export default OrderDetailModal;

@@ -32,9 +32,17 @@ const CategoryModal = sequelize.define(
   },
   { timestamps: true, freezeTableName: true }
 );
-UserModel.hasMany(CategoryModal, { foreignKey: "user_id", targetKey: "id" });
+UserModel.hasMany(CategoryModal, {
+  foreignKey: {
+    name: "user_id",
+    allowNull: true,
+  },
+});
 CategoryModal.belongsTo(UserModel, {
-  foreignKey: "user_id",
+  foreignKey: {
+    name: "user_id",
+    allowNull: true,
+  },
 });
 CategoryModal.sync({ alter: true });
 
