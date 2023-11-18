@@ -241,7 +241,7 @@ DELETE  {{domain}}/cate/1
 GET {{domain}}/product/admin
 ### Lấy tất cả sản phẩm
 
-GET {{domain}}/product/admin
+GET {{domain}}/product/home
 ### Lấy 1 sản phẩm
 POST {{domain}}/product/updatesubimage
 Content-Type: application/json

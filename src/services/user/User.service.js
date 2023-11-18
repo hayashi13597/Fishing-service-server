@@ -128,21 +128,7 @@ class UserService {
       let account = await UserModel.findOne({
         where: {
           accessToken,
-
-          $or: [
-            {
-              role: {
-                $eq: "admin",
-              },
-            },
-            {
-              role: {
-                $eq: "manager",
-              },
-            },
-          ],
         },
-        plain: true,
       });
       account = Util.coverDataFromSelect(account);
 
@@ -248,11 +234,23 @@ class UserService {
         where: {
           accessToken,
         },
+        $or: [
+          {
+            role: {
+              $eq: "admin",
+            },
+          },
+          {
+            role: {
+              $eq: "manager",
+            },
+          },
+        ],
       });
       account = Util.coverDataFromSelect(account);
 
       if (!account) {
-        throw new Error("Không tồn tại token này!");
+        throw new Error("Vui lòng đăng nhập tài khoản admin");
       } else if (!account.visiable) {
         throw new Error("Tài khoản đã bị khóa");
       } else if (account.role == "member") {
@@ -327,7 +325,7 @@ class UserService {
       );
       return DataResponse({ account, notices }, 200, "Đăng nhập thành công");
     } else {
-      return DataResponse("", 400, "Mật khẩu không chính xác");
+      return DataResponse("", 404, "Mật khẩu không chính xác");
     }
   }
   async UpdateProfile(id, profiledata) {

@@ -3,8 +3,11 @@ import CategoryModal from "../../models/cate.model";
 import OrderDetailModal from "../../models/orderDetail.modal";
 import ProductModal from "../../models/product.model";
 import UserModel from "../../models/user.model";
+import EventModal from "../../models/event.model";
+
 import Util from "../../utils";
 import CloudinaryServices from "../cloudinary.services";
+import { Op } from "sequelize";
 
 class ProductServices {
   async GetAllAdmin() {
@@ -28,12 +31,75 @@ class ProductServices {
     );
   }
   async GetViewHomeClient() {
-    const [ListProductSaleTop, ListProductNews] = await Promise.all([
-      ProductModal.findAll({ limit: 10, order: [["sell", "DESC"]] }),
-      ProductModal.findAll({ limit: 10, order: [["createdAt", "DESC"]] }),
+    const [
+      ListProductSaleTop,
+      ListProductNews,
+      ListFoods,
+      listNews,
+      listEvents,
+    ] = await Promise.all([
+      ProductModal.findAll({
+        where: {
+          price: {
+            [Op.gt]: 0,
+          },
+        },
+        include: [
+          {
+            model: CategoryModal,
+            attributes: ["id", "name"],
+          },
+        ],
+        limit: 6,
+        order: [["sell", "DESC"]],
+      }),
+      ProductModal.findAll({
+        limit: 6,
+        include: [
+          {
+            model: CategoryModal,
+            attributes: ["id", "name"],
+          },
+        ],
+        where: {
+          price: {
+            [Op.gt]: 0,
+          },
+        },
+        order: [["createdAt", "DESC"]],
+      }),
+      ProductModal.findAll({
+        limit: 6,
+        include: [
+          {
+            model: CategoryModal,
+            attributes: ["id", "name"],
+          },
+        ],
+        where: {
+          price: 0,
+        },
+        order: [["createdAt", "DESC"]],
+      }),
+      EventModal.findAll({
+        limit: 2,
+
+        where: {
+          isEvent: false,
+        },
+        order: [["createdAt", "DESC"]],
+      }),
+      EventModal.findAll({
+        limit: 2,
+
+        where: {
+          isEvent: true,
+        },
+        order: [["createdAt", "DESC"]],
+      }),
     ]);
     return DataResponse(
-      { ListProductSaleTop, ListProductNews },
+      { ListProductSaleTop, ListProductNews, ListFoods, listNews, listEvents },
       200,
       "Lấy danh sách sản phẩm trong home"
     );

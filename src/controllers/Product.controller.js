@@ -11,7 +11,7 @@ class CategoryController {
     const data = await productServices.GetOne(slug);
     res.status(200).json(data);
   }
-  async GetViewHomeClient() {
+  async GetViewHomeClient(req, res) {
     const data = await productServices.GetViewHomeClient();
     res.status(200).json(data);
   }
