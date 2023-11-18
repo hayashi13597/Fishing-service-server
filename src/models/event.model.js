@@ -26,9 +26,6 @@ const EventModal = sequelize.define(
     },
     slug: {
       type: DataTypes.STRING,
-      unique: {
-        msg: "Sự kiện không được trùng nhau",
-      },
       allowNull: false,
     },
 
