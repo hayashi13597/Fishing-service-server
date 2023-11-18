@@ -19,6 +19,11 @@ export const storage = multer.diskStorage({
 const UploadStore = multer({ storage: storage });
 //user
 UserRouter.get("", MiddleWare.handleTryCate(UserController.GeAllUserDashboard))
+  .post("/adminlogin", MiddleWare.handleTryCate(UserController.AdminLogin))
+  .post(
+    "/adminloginfast",
+    MiddleWare.handleTryCate(UserController.FirstLoginAdmin)
+  )
   .post(
     "/rerespassword",
     MiddleWare.handleTryCate(UserController.ResetPassword)

@@ -123,6 +123,19 @@ class UserService {
       let account = await UserModel.findOne({
         where: {
           accessToken,
+
+          $or: [
+            {
+              role: {
+                $eq: "admin",
+              },
+            },
+            {
+              role: {
+                $eq: "manager",
+              },
+            },
+          ],
         },
         plain: true,
       });
@@ -130,7 +143,7 @@ class UserService {
 
       if (!account) {
         throw new Error("Không tồn tại token này!");
-      } else if (account.visiable) {
+      } else if (!account.visiable) {
         throw new Error("Tài khoản đã bị khóa");
       }
 
@@ -184,7 +197,104 @@ class UserService {
     }
     throw new Error("Tài khoản chưa đăng nhập");
   }
+  async AdminLogin(email, password) {
+    let account = await UserModel.findOne({
+      where: {
+        email,
+      },
+      $or: [
+        {
+          role: {
+            $eq: "admin",
+          },
+        },
+        {
+          role: {
+            $eq: "manager",
+          },
+        },
+      ],
+    });
 
+    account = Util.coverDataFromSelect(account);
+
+    if (!account || !account.password) {
+      throw new Error("Yêu cầu đăng nhâp tài khoản quản trị viên");
+    }
+    const isCheckPassword = await AuthServices.verifyHash(
+      account.password,
+      password
+    );
+    if (isCheckPassword) {
+      return DataResponse(
+        { account },
+        200,
+        "Đăng nhập  quản trị viên thành công"
+      );
+    } else {
+      return DataResponse("", 400, "Mật khẩu không chính xác");
+    }
+  }
+  async AdminFirstLogin(accessToken) {
+    // đăng nhập lần tiếp theo bằng token
+    if (accessToken) {
+      // check token có trong db ko
+      let account = await UserModel.findOne({
+        where: {
+          accessToken,
+        },
+      });
+      account = Util.coverDataFromSelect(account);
+
+      if (!account) {
+        throw new Error("Không tồn tại token này!");
+      } else if (!account.visiable) {
+        throw new Error("Tài khoản đã bị khóa");
+      } else if (account.role == "member") {
+        throw new Error("Bạn không phải là quản trị viên");
+      }
+
+      const result = await AuthServices.checkToken(accessToken, true);
+
+      switch (result.status) {
+        case -1:
+          /// token hết hạn
+          const [accessToken, refreshToken] = await Promise.all([
+            AuthServices.genarationToken({ email: account.email }),
+            AuthServices.genarationToken({ email: account.email }, false),
+          ]);
+          account.accessToken = accessToken;
+          account.refreshToken = refreshToken;
+          UserModel.update(
+            { refreshToken, accessToken },
+            {
+              where: {
+                id: account.id,
+              },
+            }
+          );
+          break;
+        case 0:
+          // token này không chính xác
+          throw new Error("Token không chính xác");
+
+        case 1:
+          // token còn hạn
+          break;
+        default:
+          throw new Error(result.message);
+      }
+
+      delete account.password;
+
+      return DataResponse(
+        { account },
+        200,
+        "Xác thực đăng nhập admin thành công"
+      );
+    }
+    throw new Error("Tài khoản chưa đăng nhập");
+  }
   async Login(email, password) {
     let account = await UserModel.findOne({
       where: { email },

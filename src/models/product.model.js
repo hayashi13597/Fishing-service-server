@@ -54,17 +54,9 @@ const ProductModal = sequelize.define(
 
     user_id: {
       type: DataTypes.INTEGER,
-      references: {
-        model: "user",
-        key: "id",
-      },
     },
     category_id: {
       type: DataTypes.INTEGER,
-      references: {
-        model: "category",
-        key: "id",
-      },
     },
   },
   { timestamps: true, freezeTableName: true }
@@ -74,15 +66,15 @@ UserModel.hasMany(ProductModal, {
   foreignKey: { name: "user_id", allowNull: true },
 });
 CategoryModal.hasMany(ProductModal, {
-  foreignKey: "category_id",
+  foreignKey: { name: "category_id", allowNull: true },
 });
 
 ProductModal.belongsTo(UserModel, {
-  foreignKey: "user_id",
+  foreignKey: { name: "user_id", allowNull: true },
 });
 
 ProductModal.belongsTo(CategoryModal, {
-  foreignKey: "category_id",
+  foreignKey: { name: "category_id", allowNull: true },
 });
 
 ProductModal.sync({ alter: true });

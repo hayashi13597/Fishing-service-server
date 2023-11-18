@@ -46,10 +46,6 @@ const EventModal = sequelize.define(
     },
     user_id: {
       type: DataTypes.INTEGER,
-      references: {
-        model: "user",
-        key: "id",
-      },
     },
     visiable: {
       type: DataTypes.BOOLEAN,
@@ -63,10 +59,12 @@ UserModel.hasMany(EventModal, {
     name: "user_id",
     allowNull: false,
   },
-  targetKey: "id",
 });
 EventModal.belongsTo(UserModel, {
-  foreignKey: "user_id",
+  foreignKey: {
+    name: "user_id",
+    allowNull: false,
+  },
 });
 EventModal.sync({ alter: true });
 export default EventModal;

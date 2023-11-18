@@ -15,10 +15,6 @@ const DiscountModel = sequelize.define(
     },
     user_id: {
       type: DataTypes.INTEGER, // người tạo
-      references: {
-        model: "user",
-        key: "id",
-      },
     },
 
     status: {
@@ -29,9 +25,14 @@ const DiscountModel = sequelize.define(
   { timestamps: true, freezeTableName: true }
 );
 
-UserModel.hasMany(DiscountModel, { foreignKey: "user_id", targetKey: "id" });
+UserModel.hasMany(DiscountModel, {
+  foreignKey: { name: "user_id", allowNull: true },
+});
 DiscountModel.belongsTo(UserModel, {
-  foreignKey: "user_id",
+  foreignKey: {
+    name: "user_id",
+    allowNull: true,
+  },
 });
 DiscountModel.sync({ alter: true });
 export default DiscountModel;

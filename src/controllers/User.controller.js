@@ -8,6 +8,15 @@ import UserService from "../services/user/User.service";
 import Util from "../utils";
 
 class UserController {
+  async AdminLogin(req, res) {
+    const { email, password } = req.body.data;
+    if (!email || !password) {
+      throw new Error("Thiếu trường dữ liệu");
+    }
+    const data = await UserService.AdminLogin(email, password);
+
+    res.status(200).json(data);
+  }
   async GeAllUserDashboard(req, res) {
     const accounts = await UserModel.findAll({
       attributes: [
@@ -92,6 +101,11 @@ class UserController {
   async FirstLogin(req, res) {
     const [_, accessToken] = req.headers["authorization"].split(" ");
     const data = await UserService.FirstLogin(accessToken);
+    res.status(200).json(data);
+  }
+  async FirstLoginAdmin(req, res) {
+    const [_, accessToken] = req.headers["authorization"].split(" ");
+    const data = await UserService.AdminFirstLogin(accessToken);
     res.status(200).json(data);
   }
   async UpdateProfile(req, res) {

@@ -53,7 +53,7 @@ const OrderModal = sequelize.define(
     },
     discount_id: {
       type: DataTypes.INTEGER,
-      defaultValue: null,
+      defaultValue: 0,
     },
   },
   { timestamps: true, freezeTableName: true }
