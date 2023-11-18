@@ -11,9 +11,9 @@ POST {{domain}}/user/register
 Content-Type: application/json
 
 {
-  "data":{
-    "fullname":"Phạm Hoài Nam ",
-"email":"admin@gmail.com",
+ "data":{
+"fullname":"Phạm Hoài Nam ",
+"email":"asdsasd@gmail.com",
 "password":"123456"
   }
 }
@@ -348,7 +348,7 @@ Content-Type: application/json
 
 {
    "data":  {
-    "user_id": 4,
+    "user_id": 1,
     "title": "Sự kiện khui",
     "description": "Cày thâu đêm cùng Dự án đã làm toang quá",
     "imageUrl": "/assets/user-avt.png",
