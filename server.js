@@ -98,6 +98,6 @@ initRoute(app);
 app.get("/", (req, res) => {
   res.send("BACK END OKE");
 });
-app.listen(PORT, "0.0.0.0", () => {
+app.listen(PORT, () => {
   console.log("start sever PORT: ", PORT);
 });
