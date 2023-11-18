@@ -80,17 +80,8 @@ class UserService {
       where: { uid },
     });
     account = Util.coverDataFromSelect(account);
-    const notices = await NoticeModal.findAll(
-      {
-        where: {
-          user_id: {
-            [Op.or]: [account.id, "all"],
-          },
-        },
-      },
-      { limit: 10, order: '"updatedAt" DESC' }
-    );
-    if (account?.id) return { account, notices };
+
+    if (account?.id) return { account, notices: [] };
 
     // tạo token
     const [accessToken, refreshToken, password] = await Promise.all([
@@ -109,7 +100,17 @@ class UserService {
       refreshToken,
       password,
     });
-
+    account = Util.coverDataFromSelect(account);
+    const notices = await NoticeModal.findAll(
+      {
+        where: {
+          user_id: {
+            [Op.or]: [account.id, "all"],
+          },
+        },
+      },
+      { limit: 10, order: '"updatedAt" DESC' }
+    );
     delete account.password;
 
     // trả về
