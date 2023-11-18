@@ -15,7 +15,7 @@ class ProductServices {
       include: [
         {
           model: CategoryModal,
-          attributes: ["id", "name"],
+          attributes: ["id", "name", "slug"],
         },
         {
           model: UserModel,
@@ -116,16 +116,34 @@ class ProductServices {
         },
         {
           model: CategoryModal,
-          attributes: ["id", "name"],
+          attributes: ["id", "name", "slug"],
         },
       ],
     });
+    const listProductSamee = await ProductModal.findAll(
+      {
+        where: {
+          slug,
+        },
+        include: [
+          {
+            model: CategoryModal,
+            attributes: ["id", "name"],
+          },
+        ],
+      },
+      { limit: 6, order: '"updatedAt" DESC' }
+    );
     if (!ProductDetail) {
       throw new Error("Sản phẩm không tồn tại");
     }
     ProductModal.increment({ view: +1 }, { where: { slug } });
 
-    return DataResponse({ ProductDetail }, 200, "Lấy sản phẩm thành công");
+    return DataResponse(
+      { ProductDetail, listProductSamee },
+      200,
+      "Lấy sản phẩm thành công"
+    );
   }
   async Create(
     user_id,

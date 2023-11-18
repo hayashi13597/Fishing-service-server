@@ -24,8 +24,8 @@ Content-Type: application/json
 
 {
 "data":{
-    "email":"admin@asadsa",
-    "password":"122112122121"
+    "email":"admin@gmail.com",
+    "password":"123456"
 }
 }
 
@@ -243,6 +243,11 @@ GET {{domain}}/product/admin
 
 GET {{domain}}/product/home
 ### Lấy 1 sản phẩm
+
+
+GET {{domain}}/product/can-cau-nam-my
+### Lấy 1 sản phẩm
+
 POST {{domain}}/product/updatesubimage
 Content-Type: application/json
 
