@@ -47,7 +47,7 @@ class ProductServices {
         include: [
           {
             model: CategoryModal,
-            attributes: ["id", "name"],
+            attributes: ["id", "name", "slug"],
           },
         ],
         limit: 6,
@@ -58,7 +58,7 @@ class ProductServices {
         include: [
           {
             model: CategoryModal,
-            attributes: ["id", "name"],
+            attributes: ["id", "name", "slug"],
           },
         ],
         where: {
@@ -73,7 +73,7 @@ class ProductServices {
         include: [
           {
             model: CategoryModal,
-            attributes: ["id", "name"],
+            attributes: ["id", "name", "slug"],
           },
         ],
         where: {
