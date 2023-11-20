@@ -6,9 +6,20 @@ class CategoryController {
     const data = await categoryServices.GetAll();
     res.status(200).json(data);
   }
+  async GetOneSlug(req, res) {
+    const { slug } = req.params;
+    const { limit = 12, skip = 0 } = req.query;
+    const data = await categoryServices.GetOneSlug(slug, limit, skip);
+    res.status(200).json(data);
+  }
   async GetOne(req, res) {
     const { id } = req.params;
     const data = await categoryServices.GetOne(id);
+    res.status(200).json(data);
+  }
+  async GetOneSlugSeo(req, res) {
+    const { slug } = req.params;
+    const data = await categoryServices.GetOneSlugSeo(slug);
     res.status(200).json(data);
   }
   async Create(req, res) {

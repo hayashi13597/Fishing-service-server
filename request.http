@@ -201,10 +201,19 @@ Content-Type: application/json
 
 
 ### Lấy tất cả danh much
-GET {{domain}}/cate
+GET {{domain}}/cate/
 
 ### Lấy 1 danh much
 GET {{domain}}/cate/3
+
+
+### Lấy 1 danh much theo slug
+POST {{domain}}/cate/do-uong
+
+### Lấy 1 danh much theo slug
+POST {{domain}}/cate/seo/do-uong
+
+
 ### Tạo danh mục
 POST {{domain}}/cate
 Content-Type: application/json
@@ -239,13 +248,17 @@ DELETE  {{domain}}/cate/1
 
 ### Lấy tất cả sản phẩm
 GET {{domain}}/product/admin
+### Lấy tất slug
+GET {{domain}}/product/allslug
 ### Lấy tất cả sản phẩm
 
 GET {{domain}}/product/home
+
+###
+GET {{domain}}/product/bia-ha-noi
 ### Lấy 1 sản phẩm
 
-
-GET {{domain}}/product/can-cau-nam-my
+GET {{domain}}/product/seo/can-cau-nam-my
 ### Lấy 1 sản phẩm
 
 POST {{domain}}/product/updatesubimage

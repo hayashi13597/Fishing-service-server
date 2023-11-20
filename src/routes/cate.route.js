@@ -7,6 +7,11 @@ const CateRotuer = express.Router();
 // cate
 CateRotuer.get("/", MiddleWare.handleTryCate(CategoriController.GetAll))
   .get("/:id", MiddleWare.handleTryCate(CategoriController.GetOne))
+  .post("/:slug", MiddleWare.handleTryCate(CategoriController.GetOneSlug))
+  .post(
+    "/seo/:slug",
+    MiddleWare.handleTryCate(CategoriController.GetOneSlugSeo)
+  )
   .post("/", MiddleWare.handleTryCate(CategoriController.Create))
   .put("/", MiddleWare.handleTryCate(CategoriController.Update))
   .delete("/:id", MiddleWare.handleTryCate(CategoriController.Delete));

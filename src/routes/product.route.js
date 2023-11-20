@@ -9,8 +9,10 @@ ProductRouter.get(
   "/home",
   MiddleWare.handleTryCate(ProductController.GetViewHomeClient)
 )
+  .get("/allslug", MiddleWare.handleTryCate(ProductController.GetAllSlug))
   .get("/admin", MiddleWare.handleTryCate(ProductController.GetAllAdmin))
   .get("/:slug", MiddleWare.handleTryCate(ProductController.GetOne))
+  .get("/seo/:slug", MiddleWare.handleTryCate(ProductController.GetOneToSeo))
   .post("/", MiddleWare.handleTryCate(ProductController.Create))
   .post(
     "/updatesubimage",

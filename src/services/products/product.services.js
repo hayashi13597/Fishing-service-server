@@ -120,19 +120,27 @@ class ProductServices {
         },
       ],
     });
-    const listProductSamee = await ProductModal.findAll(
+
+    const listProductSame = await ProductModal.findAll(
       {
         where: {
-          slug,
+          category_id: ProductDetail.category_id,
+          id: {
+            [Op.not]: ProductDetail.id,
+          },
         },
         include: [
           {
             model: CategoryModal,
-            attributes: ["id", "name"],
+            attributes: ["id", "name", "slug"],
+          },
+          {
+            model: UserModel,
+            attributes: ["id", "fullname", "avatar"],
           },
         ],
       },
-      { limit: 6, order: '"updatedAt" DESC' }
+      { limit: 6, order: '"view" DESC' }
     );
     if (!ProductDetail) {
       throw new Error("Sản phẩm không tồn tại");
@@ -140,7 +148,7 @@ class ProductServices {
     ProductModal.increment({ view: +1 }, { where: { slug } });
 
     return DataResponse(
-      { ProductDetail, listProductSamee },
+      { ProductDetail, listProductSame },
       200,
       "Lấy sản phẩm thành công"
     );
@@ -287,6 +295,40 @@ class ProductServices {
       "Xóa ảnh phụ thành công"
     );
   }
+  async GetOneToSeo(slug) {
+    const product = await ProductModal.findOne({
+      where: {
+        slug,
+      },
+      include: [
+        {
+          model: UserModel,
+          attributes: ["id", "fullname", "avatar"],
+        },
+        {
+          model: CategoryModal,
+          attributes: ["id", "name", "slug"],
+        },
+      ],
+    });
+    return DataResponse({ product }, 200, "Lấy thành công sản phảm để seo");
+  }
+  async GetAllSlug() {
+    const listSlug = await ProductModal.findAll({
+      attributes: ["id", "slug"],
+      include: [
+        {
+          model: CategoryModal,
+          attributes: ["id", "name", "slug"],
+        },
+      ],
+    });
+    return DataResponse(
+      { products: listSlug },
+      200,
+      "Lấy danh sách slug thành công"
+    );
+  }
   async Delete(id) {
     let FindProduct = await ProductModal.findByPk(id);
     FindProduct = Util.coverDataFromSelect(FindProduct);
@@ -296,6 +338,9 @@ class ProductServices {
       listImageRender.map((item) => {
         CloudinaryServices.deleteFileImage(item.idPath);
       });
+      if (FindProduct.idPath) {
+        CloudinaryServices.deleteFileImage(FindProduct.idPath);
+      }
     }
     // xóa
     await OrderDetailModal.destroy({

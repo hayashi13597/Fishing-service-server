@@ -1,14 +1,24 @@
 import { coverSlug } from "react-swisskit";
 import productServices from "../services/products/product.services";
 
-class CategoryController {
+class ProductController {
   async GetAllAdmin(_, res) {
     const data = await productServices.GetAllAdmin();
+    res.status(200).json(data);
+  }
+  async GetAllSlug(_, res) {
+    console.log("đang lấy danh sách slug");
+    const data = await productServices.GetAllSlug();
     res.status(200).json(data);
   }
   async GetOne(req, res) {
     const { slug } = req.params;
     const data = await productServices.GetOne(slug);
+    res.status(200).json(data);
+  }
+  async GetOneToSeo(req, res) {
+    const { slug } = req.params;
+    const data = await productServices.GetOneToSeo(slug);
     res.status(200).json(data);
   }
   async GetViewHomeClient(req, res) {
@@ -66,4 +76,4 @@ class CategoryController {
     res.status(200).json(data);
   }
 }
-export default new CategoryController();
+export default new ProductController();
