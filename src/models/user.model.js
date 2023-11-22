@@ -7,11 +7,8 @@ const UserModel = sequelize.define(
   {
     email: {
       type: DataTypes.STRING,
-      allowNull: true,
-
-      validate: {
-        isEmail: true,
-      },
+     
+     defaultValue:"",
     },
     password: {
       type: DataTypes.STRING,
