@@ -12,8 +12,8 @@ Content-Type: application/json
 
 {
  "data":{
-"fullname":"Phạm Hoài Nam ",
-"email":"asdsasd@gmail.com",
+"fullname":"Quản trị viên ",
+"email":"admin@gmail.com",
 "password":"123456"
   }
 }
@@ -287,7 +287,8 @@ Content-Type: application/json
      "imageUrl":"/asdsada/dsadsa/saddsa",
       "listSubimages":"[]",
      "description":"Quần ngon lám",
-     "selloff":"0"
+     "selloff":"0",
+     "cotnent":"saddsa",
    }
 }
 ### Chỉnh sửa  sản phẩm
@@ -358,9 +359,17 @@ Content-Type: application/json
 ### Lấy tất cả Sự kiện
 GET {{domain}}/event
 
+### lấy cho trang home
+POST {{domain}}/event/new
+
+### lấy tat ca slug
+POST {{domain}}/event/slug 
+
 ### Lấy 1 Sự kiện
-GET {{domain}}/event/su-kien-khui
+
+GET {{domain}}/event/thuong-o-to-xin
 ### Tạo danh mục
+
 POST {{domain}}/event
 Content-Type: application/json
 

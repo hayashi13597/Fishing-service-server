@@ -16,7 +16,9 @@ const DiscountModel = sequelize.define(
     user_id: {
       type: DataTypes.INTEGER, // người tạo
     },
-
+    expirydate: {
+      type: DataTypes.STRING,
+    },
     status: {
       type: DataTypes.BOOLEAN,
       defaultValue: false,

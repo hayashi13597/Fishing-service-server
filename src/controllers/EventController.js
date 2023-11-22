@@ -1,13 +1,21 @@
 import EventServices from "../services/event/event.services";
 
 class EventController {
-  async GetAll(req, res) {
+  async GetAll(_, res) {
     const data = await EventServices.GetAll();
+    res.status(200).json(data);
+  }
+  async GetViewNewScreen(_, res) {
+    const data = await EventServices.GetViewNewScreen();
+    res.status(200).json(data);
+  }
+  async GetAllSlug(_, res) {
+    const data = await EventServices.GetAllSlug();
     res.status(200).json(data);
   }
   async GetOne(req, res) {
     const slug = req.params.slug;
-    console.log("slug", slug);
+
     const data = await EventServices.GetOne(slug);
     res.status(200).json(data);
   }

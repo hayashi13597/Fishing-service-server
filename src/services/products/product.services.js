@@ -51,7 +51,7 @@ class ProductServices {
           },
         ],
         limit: 6,
-        order: [["sell", "DESC"]],
+        order: [["sales", "DESC"]],
       }),
       ProductModal.findAll({
         limit: 6,
@@ -162,10 +162,11 @@ class ProductServices {
       slug,
       imageUrl,
       idPath,
-      selloff = 0,
+      sale_off: selloff,
       listSubimages = "",
       visiable = true,
       description,
+      content,
     }
   ) {
     const checkExists = await ProductModal.findOne({ where: { slug } });
@@ -181,7 +182,8 @@ class ProductServices {
       listSubimages,
       visiable,
       description,
-      selloff,
+      sale_off: selloff,
+      content,
     });
 
     newProduct = await ProductModal.findByPk(newProduct.id, {

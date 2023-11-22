@@ -37,6 +37,7 @@ class ProductController {
       visiable = true,
       description,
       selloff = 0,
+      content = "",
     } = req.body.data;
 
     const slug = coverSlug(name);
@@ -48,8 +49,9 @@ class ProductController {
       listSubimages,
       visiable,
       description,
-      selloff,
+      sale_off: selloff,
       slug,
+      content,
     });
     res.status(201).json(data);
   }

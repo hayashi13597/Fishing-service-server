@@ -8,6 +8,7 @@ const ProductModal = sequelize.define(
   {
     name: {
       type: DataTypes.STRING,
+      required: true,
     },
     slug: {
       type: DataTypes.STRING,
@@ -19,6 +20,11 @@ const ProductModal = sequelize.define(
     },
     description: {
       type: DataTypes.TEXT,
+      required: true,
+    },
+    content: {
+      type: DataTypes.TEXT,
+      required: true,
     },
     imageUrl: {
       type: DataTypes.STRING,
@@ -39,7 +45,7 @@ const ProductModal = sequelize.define(
       type: DataTypes.INTEGER,
       defaultValue: 0,
     },
-    sell: {
+    sales: {
       type: DataTypes.INTEGER,
       defaultValue: 0,
     },
@@ -47,7 +53,7 @@ const ProductModal = sequelize.define(
       type: DataTypes.FLOAT,
       defaultValue: 5,
     },
-    selloff: {
+    sale_off: {
       type: DataTypes.FLOAT, // giảm giá
       defaultValue: 0,
     },

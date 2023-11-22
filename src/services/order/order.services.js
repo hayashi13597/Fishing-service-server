@@ -14,7 +14,14 @@ class OrderServices {
       include: [
         {
           model: ProductModal,
-          attributes: ["id", "imageUrl", "price", "description", "selloff"],
+          attributes: [
+            "id",
+            "imageUrl",
+            "price",
+            "description",
+            "sale_off",
+            "sales",
+          ],
         },
       ],
     });
