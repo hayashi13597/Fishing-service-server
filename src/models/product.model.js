@@ -8,7 +8,6 @@ const ProductModal = sequelize.define(
   {
     name: {
       type: DataTypes.STRING,
-      required: true,
     },
     slug: {
       type: DataTypes.STRING,
@@ -19,7 +18,7 @@ const ProductModal = sequelize.define(
       defaultValue: 0,
     },
     description: {
-      type: DataTypes.TEXT,
+      type: DataTypes.STRING,
       required: true,
     },
     content: {

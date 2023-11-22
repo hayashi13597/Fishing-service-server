@@ -212,6 +212,9 @@ class UserService {
     if (!account || !account.password) {
       throw new Error("Yêu cầu đăng nhâp tài khoản quản trị viên");
     }
+    if (account?.role == "member") {
+      throw new Error("Bạn không phải là quản trị viên");
+    }
     const isCheckPassword = await AuthServices.verifyHash(
       account.password,
       password

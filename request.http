@@ -12,7 +12,7 @@ Content-Type: application/json
 
 {
  "data":{
-"fullname":"Quản trị viên ",
+"fullname":"Quản trị viên",
 "email":"admin@gmail.com",
 "password":"123456"
   }

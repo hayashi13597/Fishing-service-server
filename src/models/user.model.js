@@ -48,9 +48,11 @@ const UserModel = sequelize.define(
     },
     accessToken: {
       type: DataTypes.STRING,
+          defaultValue: "",
     },
     refreshToken: {
       type: DataTypes.STRING,
+          defaultValue: "",
     },
   },
   { timestamps: true, freezeTableName: true }
