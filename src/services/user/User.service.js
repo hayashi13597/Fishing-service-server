@@ -7,6 +7,11 @@ import CloudinaryServices from "../cloudinary.services";
 import casual from "casual";
 import NoticeModal from "../../models/notice.model";
 import { Op } from "sequelize";
+import ProductModal from "../../models/product.model";
+import EventModal from "../../models/event.model";
+import OrderModal from "../../models/order.model";
+import OrderDetailModal from "../../models/orderDetail.modal";
+import CategoryModal from "../../models/cate.model";
 
 export const CreateNotice = async ({
   title = "",
@@ -445,6 +450,75 @@ class UserService {
     );
     return DataResponse({}, 200, "Đặt mật khẩu mới thành công");
   }
+  async AdminScreenDashboard() {
+    let listOrderSuccess = await OrderModal.findAll({
+      where: {
+        status: "s4",
+      },
+      attributes: ["id", "discount", "shipping_fee"],
+    });
+
+    const FindOrderDetail = listOrderSuccess.map((item) => item.id);
+
+    const [
+      totalViewProduct,
+      totalViewNew,
+      listProductSellFinish,
+      totalProduct,
+      totalAccount,
+      listProductSelltop,
+      listProductNew,
+      listAccountNew,
+    ] = await Promise.all([
+      ProductModal.sum("view"),
+      EventModal.sum("views"),
+      OrderDetailModal.findAll({
+        where: { order_id: FindOrderDetail },
+        attributes: ["quantity", "price", "order_id"],
+      }),
+      ProductModal.count(),
+      UserModel.count(),
+      ProductModal.findAll({
+        order: [["sales", "DESC"]],
+        attributes: ["name", "imageUrl", "price", "sales", "view"],
+
+        limit: 5,
+      }),
+      ProductModal.findAll({
+        order: [["createdAt", "DESC"]],
+        attributes: ["name", "imageUrl", "price", "sales", "view"],
+
+        limit: 5,
+      }),
+      UserModel.findAll({
+        order: [["createdAt", "DESC"]],
+        limit: 5,
+
+        where: {
+          role: {
+            [Op.not]: "member",
+          },
+        },
+        attributes: ["role", "email", "uid", "fullname", "visiable"],
+      }),
+    ]);
+
+    return DataResponse(
+      {
+        totalViewProduct,
+        totalViewNew,
+        listProductSellFinish,
+        totalProduct,
+        totalAccount,
+        listProductSelltop,
+        listProductNew,
+        listAccountNew,
+        listOrderSuccess,
+      },
+      200,
+      "Lấy thành công danh sách sản phẩm cho trang quản trị"
+    );
+  }
   async DeleteAccount(id) {
     await Promise.all([
       NoticeModal.destroy({
@@ -458,7 +532,7 @@ class UserService {
         id,
       },
     });
-    console.log("account bị xóa", account);
+
     return DataResponse("account", 200, "Xóa Thành công");
   }
 }

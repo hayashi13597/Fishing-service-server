@@ -205,5 +205,9 @@ class UserController {
       throw new Error("Thiếu dữ liệu");
     }
   }
+  async AdminScreenDashboard(req, res) {
+    const data = await UserService.AdminScreenDashboard();
+    res.status(200).json(data);
+  }
 }
 export default new UserController();

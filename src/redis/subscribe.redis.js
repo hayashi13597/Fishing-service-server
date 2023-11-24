@@ -21,23 +21,19 @@ const subscriber = createClient({
   });
 
   subscriber.subscribe("sendmailregister", async (message, channel) => {
-    console.log("--------------------------------");
-
     const { email, createdAt } = JSON.parse(message);
-    console.log("--------------------------------");
-
-    console.log(email, createdAt);
     await MailService.register(email, createdAt);
     console.log(`message: ${message} with channel: ${channel}`);
   });
 
   subscriber.subscribe("formcontact", async (message, channel) => {
-    console.log("--------------------------------");
-
     const { email, fullname, phone } = JSON.parse(message);
-    console.log("--------------------------------");
-
     await MailService.FormContact(email, fullname, phone);
+    console.log(`message: ${message} with channel: ${channel}`);
+  });
+  subscriber.subscribe("SendContentContact", async (message, channel) => {
+    const { email, title = "Trả lời liên hệ", content } = JSON.parse(message);
+    await MailService.MailContact(email, title, content);
     console.log(`message: ${message} with channel: ${channel}`);
   });
 })();

@@ -16,7 +16,7 @@ class MailService {
   async register(email, createdAt) {
     const info = await transporter
       .sendMail({
-        from: `"${EmailSend} 👻" <adminocdao@gmail.com>`, //Địa chỉ gửi
+        from: `"${EmailSend} 👻" <${EmailSend}>`, //Địa chỉ gửi
         to: `${email}`, //  danh sách người nhận
         subject: "Chúc mừng thành viên mới ✔", // Tiêu đề
         text: "Hello world?", // plain text body
@@ -49,7 +49,7 @@ class MailService {
           <p>Trân trọng,</p>
           <p>Nguyễn Quốc Trường</p>
           <p>Hồ câu cá Ốc đảo kỳ đà</p>
-          <p>Địa chỉ email liên hệ: adminocdao@gmail.com</p>
+          <p>Địa chỉ email liên hệ: ${EmailSend}</p>
           <p>Số điện thoại liên hệ: 0347.088.538</p>
         </div>
       </div>`, // Nội dung trong Email Dạng inline style
@@ -63,7 +63,7 @@ class MailService {
   async missPssword(email, code) {
     const info = await transporter
       .sendMail({
-        from: `"${EmailSend} 👻" <adminocdao@gmail.com>`, //Địa chỉ gửi
+        from: `"${EmailSend} 👻" <${EmailSend}>`, //Địa chỉ gửi
         to: `${email}`, //  danh sách người nhận
         subject: "Mã xác nhận đổi mật khẩu ✔", // Tiêu đề
         text: "Hello world?", // plain text body
@@ -106,7 +106,7 @@ class MailService {
           <p>Trân trọng,</p>
           <p>Nguyễn Quốc Trường</p>
           <p>Hồ câu cá Ốc đảo kỳ đà</p>
-          <p>Địa chỉ email liên hệ: adminocdao@gmail.com</p>
+          <p>Địa chỉ email liên hệ: ${EmailSend}</p>
           <p>Số điện thoại liên hệ: 0347.088.538</p>
         </div>
       </div>`, // Nội dung trong Email Dạng inline style
@@ -120,9 +120,9 @@ class MailService {
   async FormContact(email, fullname, phone) {
     const info = await transporter
       .sendMail({
-        from: `"${EmailSend} 👻" <adminocdao@gmail.com>`, //Địa chỉ gửi
+        from: `"${EmailSend} 👻" <${EmailSend}>`, //Địa chỉ gửi
         to: `${email}`, //  danh sách người nhận
-        subject: "Cảm ơn bạn đã liên hệ ✔", // Tiêu đề
+        subject: "Chúng tôi sẽ trả lời  liên hệ cho bạn sớm nhất ✔", // Tiêu đề
         text: "Hello world?", // plain text body
         html: `
          <h1>Lời cảm ơn đến ${fullname}</h1>
@@ -153,7 +153,33 @@ class MailService {
           <p>Trân trọng,</p>
           <p>Nguyễn Quốc Trường</p>
           <p>Hồ câu cá Ốc đảo kỳ đà</p>
-          <p>Địa chỉ email liên hệ: adminocdao@gmail.com</p>
+          <p>Địa chỉ email liên hệ: ${EmailSend}</p>
+          <p>Số điện thoại liên hệ: 0347.088.538</p>
+        </div>
+      </div>`, // Nội dung trong Email Dạng inline style
+      })
+      .catch((err) => {
+        throw new Error(err);
+      });
+
+    console.log("Message sent: %s", info.messageId);
+  }
+  async MailContact(email, title, content) {
+    const info = await transporter
+      .sendMail({
+        from: `"${EmailSend} 👻" <${EmailSend}>`, //Địa chỉ gửi
+        to: `${email}`, //  danh sách người nhận
+        subject: `${title} ✔`, // Tiêu đề
+        text: "Thư liên hệ", // plain text body
+        html: `
+         ${content}
+
+        <hr style="height: 3px; width: 100%; background-color: black;">
+        <div>
+          <p>Trân trọng,</p>
+          <p>Nguyễn Quốc Trường</p>
+          <p>Hồ câu cá Ốc đảo kỳ đà</p>
+          <p>Địa chỉ email liên hệ: ${EmailSend}</p>
           <p>Số điện thoại liên hệ: 0347.088.538</p>
         </div>
       </div>`, // Nội dung trong Email Dạng inline style

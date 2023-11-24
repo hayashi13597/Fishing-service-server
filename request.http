@@ -4,6 +4,9 @@
 ###  lấy tất cả tài khoảng
 GET {{domain}}/user
 Content-Type: application/json
+###  lấy thong tin cho trang dashboard
+GET {{domain}}/user/dashboard
+Content-Type: application/json
 
 
 ###  Đăng ký tài khoản mới
@@ -105,7 +108,7 @@ Content-Type: application/json
 
 
 ###  danh sách Đơn hàng mua hàng
-GET {{domain}}/order?limit=5&skip=4
+GET {{domain}}/order?limit=5&skip=0
 
 
 ###  Đơn hàng mua hàng
@@ -335,9 +338,9 @@ Content-Type: application/json
 
 {
    "data":  {
-    "value": 10,
-    "user_id": 2,
-    "expirydate":"2023-12-23T01:57:34.475Z"
+    "value": 0,
+    "user_id": 1,
+    "expirydate":""
    }
 }
 ###
@@ -423,12 +426,12 @@ DELETE  {{domain}}/cate/1
 # ---------------------------------------- Liện hệ------------------------------------------### 
 
 
-### lấy hết
-GET {{domain}}/contact
+### lấy phân trang
+GET {{domain}}/contact?limit=2&skip=0
 
 
 ### Tạo nới
-POST {{domain}}/contact
+POST {{domain}}/contact?limit=2&skip=5
 Content-Type: application/json
 
 {
