@@ -10,7 +10,7 @@ const sequelize = new Sequelize(
     timezone: "+07:00",
     host: process.env.MYSQL_HOST,
     port: process.env.MYSQL_PORT,
-    logging: true,
+    logging: false,
   }
 );
 

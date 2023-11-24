@@ -30,4 +30,14 @@ const subscriber = createClient({
     await MailService.register(email, createdAt);
     console.log(`message: ${message} with channel: ${channel}`);
   });
+
+  subscriber.subscribe("formcontact", async (message, channel) => {
+    console.log("--------------------------------");
+
+    const { email, fullname, phone } = JSON.parse(message);
+    console.log("--------------------------------");
+
+    await MailService.FormContact(email, fullname, phone);
+    console.log(`message: ${message} with channel: ${channel}`);
+  });
 })();

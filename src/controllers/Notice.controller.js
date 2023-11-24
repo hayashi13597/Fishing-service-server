@@ -17,6 +17,12 @@ class NoticeController {
     const data = await NoticeServices.GetAllNotice(id);
     res.status(200).json(data);
   }
+  async GetNoticeAccount(req, res) {
+    const { id, limit, skip } = req.query;
+
+    const data = await NoticeServices.GetNoticeAccount(id, limit, skip);
+    res.status(200).json(data);
+  }
 }
 
 export default new NoticeController();

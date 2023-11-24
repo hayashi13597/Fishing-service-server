@@ -13,7 +13,7 @@ const EventModal = sequelize.define(
       defaultValue: false,
     },
     timeEvent: {
-      type: DataTypes.BOOLEAN,
+      type: DataTypes.INTEGER,
       defaultValue: 7,
     },
     description: {
@@ -34,7 +34,7 @@ const EventModal = sequelize.define(
     },
 
     time_end: {
-      type: DataTypes.INTEGER,
+      type: DataTypes.STRING,
       defaultValue: 0,
     },
     views: {

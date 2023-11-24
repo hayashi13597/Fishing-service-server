@@ -11,8 +11,23 @@ class DiscountController {
       },
     });
     discountItem = Util.coverDataFromSelect(discountItem);
+    console.log(discountItem);
     if (!discountItem) {
       throw new Error("Mã giảm giá không tồn tại");
+    } else if (discountItem.expirydate) {
+      const isExisit = Util.isTimeEnd(discountItem.expirydate);
+
+      if (!isExisit) {
+        DiscountModel.update(
+          { statue: true },
+          {
+            where: {
+              code,
+            },
+          }
+        );
+        throw new Error("Mã giảm giá hết hạn");
+      }
     } else if (discountItem.status) {
       throw new Error("Mã giảm giá đã sử dụng rồi");
     }
@@ -25,10 +40,12 @@ class DiscountController {
       .json(DataResponse({ listDiscount }, 200, "Danh sách mã giảm giá"));
   }
   async AddDiscount(req, res) {
-    const { value, user_id } = req.body.data;
+    const { value, user_id, expirydate = "" } = req.body.data;
     const createDiscount = await DiscountModel.create({
       value,
       user_id,
+      expirydate,
+      code: Util.GenerateDiscountCode(),
     });
     res
       .status(201)

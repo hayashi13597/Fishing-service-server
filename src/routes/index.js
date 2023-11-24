@@ -5,6 +5,7 @@ import ProductRouter from "./product.route";
 import DiscountRouter from "./discount.route";
 import OrderRouter from "./order.route";
 import EventRouter from "./event.route";
+import ContactRouter from "./contact.route";
 const AllRouter = (app) => {
   app.use("/user", UserRouter);
   app.use("/notice", NoticeRouter);
@@ -13,5 +14,7 @@ const AllRouter = (app) => {
   app.use("/order", OrderRouter);
   app.use("/discount", DiscountRouter);
   app.use("/event", EventRouter);
+  app.use("/contact", ContactRouter);
 };
+ContactRouter;
 export default AllRouter;

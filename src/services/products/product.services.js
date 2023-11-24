@@ -22,7 +22,7 @@ class ProductServices {
           attributes: ["avatar", "fullname"],
         },
       ],
-      order: [["createdAt", "DESC"]],
+      order: [["updatedAt", "DESC"]],
     });
     return DataResponse(
       { products: listProduct },
@@ -206,24 +206,6 @@ class ProductServices {
     );
   }
   async Update(id, productUpdate) {
-    if (productUpdate?.listSubimages) {
-      try {
-        let findProduct = await ProductModal.findByPk(id);
-
-        findProduct = Util.coverDataFromSelect(findProduct);
-
-        const listImageRender =
-          JSON.parse(findProduct?.listSubimages || []) || [];
-        const newSubImage = JSON.parse(productUpdate.listSubimages);
-        productUpdate.listSubimages = JSON.stringify([
-          ...listImageRender,
-          ...newSubImage,
-        ]);
-      } catch {
-        console.log("Lỗi update subimage");
-      }
-    }
-
     await ProductModal.update(productUpdate, {
       where: {
         id,
@@ -232,7 +214,8 @@ class ProductServices {
 
     ProductModal.increment({ view: +1 }, { where: { id } });
 
-    const Listproduct = await ProductModal.findAll({
+    const productEdit = await ProductModal.findOne({
+      where: { id },
       include: [
         {
           model: CategoryModal,
@@ -246,7 +229,7 @@ class ProductServices {
     });
 
     return DataResponse(
-      { products: Listproduct },
+      { product: productEdit },
       200,
       "Cập nhập sản phẩm  thành công"
     );
@@ -254,48 +237,32 @@ class ProductServices {
   async UpdateSubImage(id, idPath) {
     let findProduct = await ProductModal.findByPk(id);
     findProduct = Util.coverDataFromSelect(findProduct);
-    if (findProduct?.listSubimages) {
+    if (idPath == findProduct?.idPath) {
+      CloudinaryServices.deleteFileImage(idPath);
+    } else if (findProduct?.listSubimages) {
       try {
         let listImageRender =
           JSON.parse(findProduct?.listSubimages || []) || [];
         listImageRender = listImageRender.filter(
           (item) => item.idPath != idPath
         );
+
         listImageRender = JSON.stringify(listImageRender);
-        await Promise.all([
-          CloudinaryServices.deleteFileImage(idPath),
-          ProductModal.update(
-            { listSubimages: listImageRender },
-            {
-              where: {
-                id,
-              },
-            }
-          ),
-        ]);
         CloudinaryServices.deleteFileImage(idPath);
+        await ProductModal.update(
+          { listSubimages: listImageRender },
+          {
+            where: {
+              id,
+            },
+          }
+        );
       } catch {
         throw new Error("Không xóa thành công");
       }
     }
-    const listProduct = await ProductModal.findAll({
-      include: [
-        {
-          model: CategoryModal,
-          attributes: ["id", "name"],
-        },
-        {
-          model: UserModel,
-          attributes: ["avatar", "fullname"],
-        },
-      ],
-      order: [["createdAt", "DESC"]],
-    });
-    return DataResponse(
-      { products: listProduct },
-      200,
-      "Xóa ảnh phụ thành công"
-    );
+
+    return DataResponse({}, 200, "Xóa ảnh phụ thành công");
   }
   async GetOneToSeo(slug) {
     const product = await ProductModal.findOne({
