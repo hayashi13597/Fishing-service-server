@@ -134,7 +134,7 @@ class OrderServices {
       const findDiscount = await DiscountModel.findByPk(order.discount_id);
 
       if (!findDiscount) {
-        order.discount_id = null;
+        order.discount_id = 1;
       } else {
         order.discount_id = findDiscount.id;
         order.discount = findDiscount.value;

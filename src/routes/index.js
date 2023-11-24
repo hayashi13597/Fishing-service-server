@@ -8,12 +8,19 @@ import EventRouter from "./event.route";
 import ContactRouter from "./contact.route";
 const AllRouter = (app) => {
   app.use("/user", UserRouter);
+
   app.use("/notice", NoticeRouter);
+
   app.use("/cate", CateRotuer);
+
   app.use("/product", ProductRouter);
+
   app.use("/order", OrderRouter);
+
   app.use("/discount", DiscountRouter);
+
   app.use("/event", EventRouter);
+
   app.use("/contact", ContactRouter);
 };
 ContactRouter;
