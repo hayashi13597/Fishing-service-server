@@ -4,6 +4,7 @@ import UserModel from "../../models/user.model";
 import ProductModal from "../../models/product.model";
 
 import Util from "../../utils";
+import OrderDetailModal from "../../models/orderDetail.modal";
 
 class CategoryServices {
   async GetAll() {
@@ -132,7 +133,39 @@ class CategoryServices {
         id: id,
       },
     });
+    let listProduct = await ProductModal.findAll({
+      where: {
+        category_id: id,
+      },
+      attributes: ["id"],
+    });
+    listProduct = Util.coverDataFromSelect(listProduct);
+    listProduct
+      .forEach((item) => {
+        Promise.resolve(() => {
+          const idTimeOut = setTimeout(() => {
+            clearTimeout(idTimeOut);
+            return OrderDetailModal.destroy({
+              where: {
+                product_id: item.id,
+              },
+            });
+          }, [2000]);
+        });
+      })
+      .then(() => {
+        console.log("Xóa thành công");
+      });
+    await ProductModal.destroy({
+      where: {
+        category_id: id,
+      },
+    });
     return DataResponse({}, 200, "Xóa danh mục thành công");
   }
 }
 export default new CategoryServices();
+
+function Sleep(callback) {
+  return Promise;
+}

@@ -19,8 +19,14 @@ class Contactcontroller {
       throw new Error("Dữ liệu thiếu");
     }
   }
+  async SendContact(req, res) {
+    const { email, title, content, id } = req.body.data;
+    const data = await contactServices.ContactMail(email, title, content, id);
+    return res.status(201).json(data);
+  }
   async GetAll(req, res) {
-    const data = await contactServices.GetAll();
+    const { limit, skip = 0 } = req.query;
+    const data = await contactServices.GetAll(limit, skip);
     return res.status(200).json(data);
   }
   async Delete(req, res) {

@@ -23,6 +23,10 @@ const ContactModal = sequelize.define(
       type: DataTypes.STRING,
       allowNull: false,
     },
+    status: {
+      type: DataTypes.BOOLEAN,
+      defaultValue: false,
+    },
   },
   { timestamps: true, freezeTableName: true }
 );

@@ -8,6 +8,8 @@ import { CreateNotice } from "../user/User.service";
 import Util from "../../utils";
 import CategoryModal from "../../models/cate.model";
 import NoticeModal from "../../models/notice.model";
+import UserModel from "../../models/user.model";
+import { Op } from "sequelize";
 const StatusPay = {
   s1: "Chờ xử lý",
   s2: "Đã kiểm duyệt",
@@ -54,17 +56,38 @@ class OrderServices {
     });
     try {
       CreateNotice({
-        title: `Thông báo về đơn hàng ${orderUpdate.codebill}`,
-        content: `Cập nhập trạng thái đơn hàng ${
-          StatusPay[orderUpdate.status]
-        }`,
+        title: `Thông báo về đơn hàng #${orderUpdate.codebill}`,
+        content: `Đơn hàng đang ở trạng thái ${StatusPay[orderUpdate.status]}`,
         receiver_id: orderUpdate.user_id,
         user_id: orderUpdate.user_id,
         isSee: false,
       });
+      if (orderUpdate.status == "s4") {
+        let orderDetail = await OrderDetailModal.findAll({
+          where: {
+            order_id: id,
+          },
+          attributes: ["product_id"],
+        });
+        orderDetail = Util.coverDataFromSelect(orderDetail);
+        orderDetail.forEach((item) => {
+          ProductModal.increment(
+            {
+              view: +1,
+              sales: +1,
+            },
+            {
+              where: {
+                id: item.product_id,
+              },
+            }
+          );
+        });
+      }
     } catch (error) {}
 
     const order = await OrderModal.findByPk(id);
+
     return DataResponse({ order: order }, 200, "Cập nhập hóa đơn thành công");
   }
 
@@ -114,6 +137,7 @@ class OrderServices {
         order.discount_id = null;
       } else {
         order.discount_id = findDiscount.id;
+        order.discount = findDiscount.value;
         DiscountModel.update(
           { status: true },
           {
@@ -124,7 +148,7 @@ class OrderServices {
         );
       }
     } else {
-      order.discount_id = null;
+      order.discount_id = 1;
     }
     order.codebill = Util.GenerateDiscountCode(10);
     const CreateOrder = await OrderModal.create(order);

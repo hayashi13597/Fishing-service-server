@@ -2,8 +2,7 @@ import Utils from "../utils";
 import DiscountModel from "./discount.model";
 import sequelize from "./index";
 import { DataTypes } from "sequelize";
-import OrderDetailModal from "./orderDetail.modal";
-import casual from "casual";
+
 import UserModel from "./user.model";
 
 const OrderModal = sequelize.define(
@@ -18,7 +17,7 @@ const OrderModal = sequelize.define(
     },
     codebill: {
       type: DataTypes.STRING,
-      defaultValue: `${casual.unix_time}`,
+      allowNull: false,
     },
     fullname: {
       type: DataTypes.STRING,
@@ -53,6 +52,9 @@ const OrderModal = sequelize.define(
     },
     discount_id: {
       type: DataTypes.INTEGER,
+    },
+    discount: {
+      type: DataTypes.INTEGER,
       defaultValue: 0,
     },
   },
@@ -66,6 +68,9 @@ OrderModal.belongsTo(UserModel, {
   foreignKey: { name: "user_id", allowNull: true },
 });
 
+DiscountModel.hasOne(OrderModal, {
+  foreignKey: { name: "discount_id", allowNull: true },
+});
 OrderModal.sync({ alter: true });
 export default OrderModal;
 

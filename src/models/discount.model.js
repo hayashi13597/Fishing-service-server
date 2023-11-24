@@ -1,7 +1,7 @@
 import sequelize from "./index";
 import { DataTypes } from "sequelize";
 import UserModel from "./user.model";
-import casual from "casual";
+
 const DiscountModel = sequelize.define(
   "Discount",
   {
@@ -37,6 +37,7 @@ DiscountModel.belongsTo(UserModel, {
     allowNull: true,
   },
 });
+
 DiscountModel.sync({ alter: true });
 export default DiscountModel;
 

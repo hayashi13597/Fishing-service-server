@@ -7,12 +7,15 @@ const CategoryModal = sequelize.define(
   {
     name: {
       type: DataTypes.STRING,
+      allowNull: false,
     },
     description: {
       type: DataTypes.TEXT,
+      allowNull: false,
     },
     imageUrl: {
       type: DataTypes.STRING,
+      allowNull: false,
     },
     idPath: {
       type: DataTypes.STRING,

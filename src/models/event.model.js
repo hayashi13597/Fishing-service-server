@@ -7,6 +7,7 @@ const EventModal = sequelize.define(
   {
     title: {
       type: DataTypes.STRING,
+      allowNull: false,
     },
     isEvent: {
       type: DataTypes.BOOLEAN,

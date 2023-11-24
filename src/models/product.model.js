@@ -8,9 +8,11 @@ const ProductModal = sequelize.define(
   {
     name: {
       type: DataTypes.STRING,
+      allowNull: false,
     },
     slug: {
       type: DataTypes.STRING,
+      allowNull: false,
     },
 
     price: {
