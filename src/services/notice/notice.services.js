@@ -21,13 +21,39 @@ class NoticeServices {
   }
   async GetAllNotice(receiver_id) {
     const notices = await NoticeModal.findAll({
+      limit: 10,
       where: {
         receiver_id: {
           [Op.or]: [receiver_id, "all"],
         },
       },
+      order: [["createdAt", "DESC"]],
     });
     return DataResponse({ notices }, 200, "Lấy danh sách thông báo thành công");
+  }
+  async GetNoticeAccount(id, limit = 6, skip) {
+    const notices = await NoticeModal.findAll({
+      where: {
+        receiver_id: {
+          [Op.or]: [id, "all"],
+        },
+      },
+      limit: Number(limit),
+      offset: Number(skip),
+      order: [["createdAt", "DESC"]],
+    });
+    const total = await NoticeModal.count({
+      where: {
+        receiver_id: {
+          [Op.or]: [id, "all"],
+        },
+      },
+    });
+    return DataResponse(
+      { notices, total },
+      200,
+      "Lấy danh sách thông báo thành công"
+    );
   }
 }
 

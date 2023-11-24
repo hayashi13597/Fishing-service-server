@@ -102,6 +102,21 @@ Content-Type: application/json
 
 // coi trên link :https://dbdiagram.io/d/65462d377d8bbd646579a7d0;
 // limk website: https://fishing-services.vercel.app/
+
+
+###  danh sách Đơn hàng mua hàng
+GET {{domain}}/order?limit=5&skip=4
+
+
+###  Đơn hàng mua hàng
+POST {{domain}}/order
+Content-Type: application/json
+
+{
+   "data":{
+      "order_id":1
+   }
+}
 ###  Đơn hàng mua hàng
 POST {{domain}}/order
 Content-Type: application/json
@@ -165,17 +180,21 @@ Content-Type: application/json
 
 // khi anh click vào chi tiết đơn hàng thì em trả cho anh đơn hàng chi tiet
 
-
-POST {{domain}}/orderdetail
+###
+POST {{domain}}/order
 Content-Type: application/json
 
 {
-    "order_detail":"string" //id đơn hnang2 chi tiết
+    "data":{
+      "order_id":"5"
+    } 
 }
 
 
 # server trả về mảng sản phẩm có trong order đó khi xem sản phẩm chi tiết
-
+###
+POST {{domain}}/order
+Content-Type: application/json
 {
     "data":
    [
@@ -316,8 +335,9 @@ Content-Type: application/json
 
 {
    "data":  {
-    "value": 0,
-    "user_id": 2
+    "value": 10,
+    "user_id": 2,
+    "expirydate":"2023-12-23T01:57:34.475Z"
    }
 }
 ###
@@ -331,7 +351,6 @@ Content-Type: application/json
    "data":  {
     "id":"15",
     "value": "126"
-
    }
 }
 
@@ -341,7 +360,7 @@ Content-Type: application/json
 
 {
    "data":  {
-    "code": "56806105"
+    "code": "EMun7k"
 
    }
 }
@@ -399,3 +418,35 @@ Content-Type: application/json
 
 ### Xóa danh much5
 DELETE  {{domain}}/cate/1
+
+
+# ---------------------------------------- Liện hệ------------------------------------------### 
+
+
+### lấy hết
+GET {{domain}}/contact
+
+
+### Tạo nới
+POST {{domain}}/contact
+Content-Type: application/json
+
+{
+   "data":{
+      "fullname":"Phạm hoài nam",
+      "email":"namanhthao59@gmail.com",
+      "content":"Phạm hoài nam liên bạn mua câu",
+      "phone":"0325024277"
+
+   }
+}
+
+### Xóa
+DELETE  {{domain}}/contact/2
+
+
+# ---------------------------------------- thong bao------------------------------------------### 
+
+### lấy hết
+GET {{domain}}/notice?id=2&limit=2&skip=5
+

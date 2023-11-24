@@ -196,11 +196,20 @@ class EventService {
     );
   }
   async Edit(id, editContent) {
-    await EventModal.update(editContent, {
-      where: {
-        id,
-      },
-    });
+    const time_end = editContent?.time_end || "";
+    let timeEvent = 0;
+    if (time_end && editContent.isEvent) {
+      timeEvent = Math.floor(Util.TimeDiff(time_end) / (3600 * 24 * 1000));
+    }
+
+    await EventModal.update(
+      { ...editContent, timeEvent, time_end },
+      {
+        where: {
+          id,
+        },
+      }
+    );
     const EventItems = await EventModal.findOne({
       where: {
         id,

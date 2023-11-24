@@ -35,11 +35,11 @@ const OrderModal = sequelize.define(
       allowNull: false,
       trim: true,
     },
-    shipment: {
+    shipping_fee: {
       type: DataTypes.INTEGER,
       defaultValue: 0,
     },
-    paymentMethod: {
+    payment_method: {
       type: DataTypes.STRING, // phương thức thanh toán cod internet banking
       allowNull: false,
       trim: true,

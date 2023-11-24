@@ -8,14 +8,14 @@ import casual from "casual";
 import NoticeModal from "../../models/notice.model";
 import { Op } from "sequelize";
 
-const CreateNotice = async ({
+export const CreateNotice = async ({
   title = "",
   content = "",
   receiver_id,
   user_id,
   isSee = true,
 }) => {
-  await NoticeModal.create({
+  return await NoticeModal.create({
     title,
     content,
     receiver_id,

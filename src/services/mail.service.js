@@ -11,11 +11,12 @@ const transporter = nodemailer.createTransport({
     pass: process.env.NODEMAILER_PASSWORD || "tatvcdfftwrtwzwb",
   },
 });
+const EmailSend = "namph2102@gmail.com";
 class MailService {
   async register(email, createdAt) {
     const info = await transporter
       .sendMail({
-        from: `"${email} 👻" <adminocdao@gmail.com>`, //Địa chỉ gửi
+        from: `"${EmailSend} 👻" <adminocdao@gmail.com>`, //Địa chỉ gửi
         to: `${email}`, //  danh sách người nhận
         subject: "Chúc mừng thành viên mới ✔", // Tiêu đề
         text: "Hello world?", // plain text body
@@ -31,7 +32,7 @@ class MailService {
         <p>Thông tin tài khoản của bạn:</p>
         <ul>
           <li>Tài khoản: <strong> ${email}</strong></li>
-          <li>Ngày tạo: <strong> ${createdAt}</strong></li>
+          <li>Thời gian tạo: <strong> ${createdAt}</strong></li>
         </ul>
         <br />
         <p>
@@ -43,6 +44,7 @@ class MailService {
           Chúc bạn có một thời gian thú vị và hạnh phúc khi sử dụng tài khoản của
           mình để mua sắp và nhận giảm giá hàng tháng trên nền tảng của chúng tôi!
         </p>
+         <hr style="height: 3px; width: 100%; background-color: black;">
         <div>
           <p>Trân trọng,</p>
           <p>Nguyễn Quốc Trường</p>
@@ -61,7 +63,7 @@ class MailService {
   async missPssword(email, code) {
     const info = await transporter
       .sendMail({
-        from: `"${email} 👻" <adminocdao@gmail.com>`, //Địa chỉ gửi
+        from: `"${EmailSend} 👻" <adminocdao@gmail.com>`, //Địa chỉ gửi
         to: `${email}`, //  danh sách người nhận
         subject: "Mã xác nhận đổi mật khẩu ✔", // Tiêu đề
         text: "Hello world?", // plain text body
@@ -99,6 +101,7 @@ class MailService {
         <p>
           Chúc bạn một ngày vui vẻ nhé!
         </p>
+         <hr style="height: 3px; width: 100%; background-color: black;">
         <div>
           <p>Trân trọng,</p>
           <p>Nguyễn Quốc Trường</p>
@@ -113,6 +116,53 @@ class MailService {
       });
 
     console.log("Message sent: %s", info.messageId); //  Đả gửi mail nhận mật khẩu
+  }
+  async FormContact(email, fullname, phone) {
+    const info = await transporter
+      .sendMail({
+        from: `"${EmailSend} 👻" <adminocdao@gmail.com>`, //Địa chỉ gửi
+        to: `${email}`, //  danh sách người nhận
+        subject: "Cảm ơn bạn đã liên hệ ✔", // Tiêu đề
+        text: "Hello world?", // plain text body
+        html: `
+         <h1>Lời cảm ơn đến ${fullname}</h1>
+     
+        <p>
+        Chúng tôi cảm ơn bạn đã liên hệ tại trang website của chúng tôi!</p>
+        </p>
+        <br />
+        <p>Thông tin liên hệ của bạn:</p>
+        <ul>
+          <li>Họ và tên: <strong> ${email}</strong></li>
+          <li>Số điện thoại: <strong> ${phone}</strong></li>
+          <li>Thời gian liên hệ: <strong> ${Util.formatDate(
+            new Date(Date.now()).toISOString()
+          )}</strong></li>
+        </ul>
+        <br />
+        <p>
+          Chúng tôi đọc liên hệ bạn torng thời gian sớm nhất! Nếu có việc gì gấp vui lòng gọi đường dây nóng
+        </p>
+ 
+        <p>
+          Chúc bạn có một thời gian thú vị và hạnh phúc khi sử dụng tài khoản của
+          mình để mua sắp và nhận giảm giá hàng tháng trên nền tảng của chúng tôi!
+        </p>
+        <hr style="height: 3px; width: 100%; background-color: black;">
+        <div>
+          <p>Trân trọng,</p>
+          <p>Nguyễn Quốc Trường</p>
+          <p>Hồ câu cá Ốc đảo kỳ đà</p>
+          <p>Địa chỉ email liên hệ: adminocdao@gmail.com</p>
+          <p>Số điện thoại liên hệ: 0347.088.538</p>
+        </div>
+      </div>`, // Nội dung trong Email Dạng inline style
+      })
+      .catch((err) => {
+        throw new Error(err);
+      });
+
+    console.log("Message sent: %s", info.messageId);
   }
 }
 

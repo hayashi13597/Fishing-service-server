@@ -30,6 +30,9 @@ const OrderDetailModal = sequelize.define(
 ProductModal.hasOne(OrderDetailModal, {
   foreignKey: { name: "product_id", allowNull: true },
 });
+OrderDetailModal.belongsTo(ProductModal, {
+  foreignKey: { name: "product_id", allowNull: true },
+});
 OrderModal.hasMany(OrderDetailModal, {
   foreignKey: { name: "order_id", allowNull: true },
 });

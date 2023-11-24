@@ -7,7 +7,7 @@ const DiscountModel = sequelize.define(
   {
     code: {
       type: DataTypes.STRING,
-      defaultValue: `${casual.unix_time}`,
+      allowNull: false,
     },
     value: {
       type: DataTypes.FLOAT,
@@ -18,6 +18,7 @@ const DiscountModel = sequelize.define(
     },
     expirydate: {
       type: DataTypes.STRING,
+      defaultValue: "",
     },
     status: {
       type: DataTypes.BOOLEAN,

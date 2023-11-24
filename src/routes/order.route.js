@@ -6,11 +6,12 @@ const OrderRouter = express.Router();
 //order
 
 OrderRouter.get(
-  "/:id",
+  "/detail",
   middlewares.handleTryCate(OrderController.GetListOrderClient)
 )
   .get("/", middlewares.handleTryCate(OrderController.GetAllOrderAdmin))
   .post("/", middlewares.handleTryCate(OrderController.GetOrderDetail))
+  .patch("/", middlewares.handleTryCate(OrderController.Edit))
   .post("/create", middlewares.handleTryCate(OrderController.CreateOrder))
   .delete("/:id", middlewares.handleTryCate(OrderController.DeleteOrder))
   .delete(
