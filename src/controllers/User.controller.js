@@ -209,5 +209,10 @@ class UserController {
     const data = await UserService.AdminScreenDashboard();
     res.status(200).json(data);
   }
+  async Search(req, res) {
+    const { search } = req.body.data;
+    const data = await UserService.Search(search);
+    res.status(200).json(data);
+  }
 }
 export default new UserController();

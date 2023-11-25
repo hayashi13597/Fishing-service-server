@@ -110,15 +110,14 @@ class OrderServices {
         user_id,
       },
     });
-    const listOrder =
-      (await OrderModal.findAll({
-        where: {
-          user_id,
-        },
-        order: [["updatedAt", "DESC"]],
-        limit: limit * 1,
-        offset: skip * 1,
-      })) || [];
+    const listOrder = await OrderModal.findAll({
+      where: {
+        user_id,
+      },
+      order: [["updatedAt", "DESC"]],
+      limit: limit * 1,
+      offset: skip * 1,
+    });
     return DataResponse(
       { listOrder, total },
       200,
@@ -200,6 +199,32 @@ class OrderServices {
         id,
       },
     });
+    return DataResponse({}, 200, "Xóa đơn hàng chi tiết thành công");
+  }
+  async Search(text) {
+    const listOrder = await OrderModal.findAll({
+      where: {
+        [Op.or]: {
+          codebill: {
+            [Op.substring]: text,
+          },
+          email: {
+            [Op.substring]: text,
+          },
+          fullname: {
+            [Op.substring]: text,
+          },
+          phone: {
+            [Op.substring]: text,
+          },
+        },
+      },
+    });
+    return DataResponse(
+      { orders: listOrder },
+      200,
+      "Lấy danh sách hóa đơn thành công"
+    );
   }
 }
 export default new OrderServices();

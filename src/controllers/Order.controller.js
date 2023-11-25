@@ -42,5 +42,10 @@ class OrderController {
     const data = await OrderServices.DeleteOrderDetails(id);
     res.status(200).json(data);
   }
+  async Search(req, res) {
+    const { search } = req.body.data;
+    const data = await OrderServices.Search(search);
+    res.status(200).json(data);
+  }
 }
 export default new OrderController();

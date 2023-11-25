@@ -32,6 +32,7 @@ UserRouter.get("", MiddleWare.handleTryCate(UserController.GeAllUserDashboard))
     "/rerespassword",
     MiddleWare.handleTryCate(UserController.ResetPassword)
   )
+  .post("/search", MiddleWare.handleTryCate(UserController.Search))
   .patch("", MiddleWare.handleTryCate(UserController.EditUserAdminProfile))
   .post("/register", MiddleWare.handleTryCate(UserController.RegisterAccount))
   .put("", MiddleWare.handleTryCate(UserController.UpdateProfile)) //  cập nhập profile

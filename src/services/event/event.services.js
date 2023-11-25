@@ -5,7 +5,7 @@ import UserModel from "../../models/user.model";
 import Util from "../../utils";
 import CloudinaryServices from "../cloudinary.services";
 import { Op } from "sequelize";
-
+import { CreateNotice } from "../user/User.service";
 class EventService {
   async GetAll() {
     const listEvents = await EventModal.findAll({
@@ -183,6 +183,19 @@ class EventService {
     const slug = coverSlug(infoEvemt.title);
     let EventItems = {};
     try {
+      if (infoEvemt.isEvent) {
+        CreateNotice(
+          {
+            title: `Thông báo sự kiện ${infoEvemt.title}`,
+            content: `${infoEvemt.description}`,
+            receiver_id: "all",
+            user_id: infoEvemt.user_id,
+            isSee: false,
+          },
+          "/tin-tuc/" + slug
+        );
+      }
+
       EventItems = await EventModal.create({ slug, ...infoEvemt });
     } catch (error) {
       throw new Error(error.message);
@@ -246,6 +259,34 @@ class EventService {
       201,
       `Xóa thành công 
     ${findItem.isEvent ? "sự kiện" : "tin tức"}  này!`
+    );
+  }
+  async Search(text) {
+    const listEVents = await EventModal.findAll({
+      where: {
+        [Op.or]: {
+          title: {
+            [Op.substring]: text,
+          },
+          description: {
+            [Op.substring]: text,
+          },
+        },
+      },
+      include: [
+        {
+          model: UserModel,
+          attributes: ["avatar", "fullname"],
+        },
+      ],
+      order: [["updatedAt", "DESC"]],
+      limit: 10,
+    });
+
+    return DataResponse(
+      { events: listEVents },
+      200,
+      "Tìm kiếm tin tức thành công"
     );
   }
 }

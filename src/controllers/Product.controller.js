@@ -77,5 +77,10 @@ class ProductController {
     const data = await productServices.Delete(id);
     res.status(200).json(data);
   }
+  async Search(req, res) {
+    const { search } = req.body.data;
+    const data = await productServices.SearchProduct(search);
+    res.status(200).json(data);
+  }
 }
 export default new ProductController();

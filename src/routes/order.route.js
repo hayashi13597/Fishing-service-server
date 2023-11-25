@@ -11,6 +11,7 @@ OrderRouter.get(
 )
   .get("/", middlewares.handleTryCate(OrderController.GetAllOrderAdmin))
   .post("/", middlewares.handleTryCate(OrderController.GetOrderDetail))
+  .post("/search", middlewares.handleTryCate(OrderController.Search))
   .patch("/", middlewares.handleTryCate(OrderController.Edit))
   .post("/create", middlewares.handleTryCate(OrderController.CreateOrder))
   .delete("/:id", middlewares.handleTryCate(OrderController.DeleteOrder))

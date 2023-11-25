@@ -1,3 +1,4 @@
+import { Op } from "sequelize";
 import { DataResponse } from "../middlewares";
 import DiscountModel from "../models/discount.model";
 import Util from "../utils";
@@ -34,10 +35,18 @@ class DiscountController {
     res.status(200).json(DataResponse({}, 200, "Bạn có thể sử dụng mã này"));
   }
   async GetAllDiscount(req, res) {
-    const listDiscount = await DiscountModel.findAll();
+    const { limit = 5, skip = 0 } = req.query;
+    const listDiscount = await DiscountModel.findAll({
+      limit: parseInt(limit),
+      offset: parseFloat(skip),
+      order: [["createdAt", "DESC"]],
+    });
+    const total = await DiscountModel.count();
     res
       .status(200)
-      .json(DataResponse({ listDiscount }, 200, "Danh sách mã giảm giá"));
+      .json(
+        DataResponse({ listDiscount, total }, 200, "Danh sách mã giảm giá")
+      );
   }
   async AddDiscount(req, res) {
     const { value, user_id, expirydate = "" } = req.body.data;
@@ -89,6 +98,28 @@ class DiscountController {
       .json(
         DataResponse({ isSccess: isDelete }, 200, "Xóa thành công mã giảm giá")
       );
+  }
+  async Search(req, res) {
+    const { search } = req.body.data;
+    const listDiscount = await DiscountModel.findAll({
+      where: {
+        [Op.or]: {
+          value: {
+            [Op.substring]: search,
+          },
+          code: {
+            [Op.substring]: search,
+          },
+        },
+      },
+    });
+
+    const data = DataResponse(
+      { discounts: listDiscount },
+      200,
+      "Lấy danh sách mã giảm giá thành công"
+    );
+    res.status(200).json(data);
   }
 }
 

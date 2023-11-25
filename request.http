@@ -274,6 +274,17 @@ GET {{domain}}/product/admin
 GET {{domain}}/product/allslug
 ### Lấy tất cả sản phẩm
 
+### tìm kiếm sản phẩm
+POST {{domain}}/product/search
+Content-Type: application/json
+
+{
+   "data":{
+      "search":"cần"
+   }
+}
+### Lấy tất cả sản phẩm
+
 GET {{domain}}/product/home
 
 ###
@@ -331,14 +342,14 @@ DELETE  {{domain}}/product/1
 
 
 ###
-GET  {{domain}}/discount
+GET  {{domain}}/discount?limit=5&skip=0
 ###//thêm
 POST  {{domain}}/discount
 Content-Type: application/json
 
 {
    "data":  {
-    "value": 0,
+    "value": 10,
     "user_id": 1,
     "expirydate":""
    }
@@ -452,4 +463,29 @@ DELETE  {{domain}}/contact/2
 
 ### lấy hết
 GET {{domain}}/notice?id=2&limit=2&skip=5
+
+
+
+# ---------------------------------------- đánh giá ------------------------------------------### 
+
+### lấy hết
+GET {{domain}}/review?id=2&limit=2&skip=5
+###
+GET {{domain}}/review/3
+### Thêm mới
+POST {{domain}}/review
+Content-Type: application/json
+
+{
+   "data":{
+      "star":2,
+      "user_id":2,
+      "product_id":3,
+      "content" : "Sản phâm tuyệt vời quá",
+      "listImage" : ""
+   }
+}
+
+### lấy hết
+DELETE  {{domain}}/review/1
 

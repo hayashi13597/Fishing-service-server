@@ -17,7 +17,7 @@ class Util {
     return JSON.parse(data);
   }
   static isTimeEnd(timecreate) {
-    return new Date(timecreate).getTime() - new Date(Date.now()) > 0;
+    return new Date(timecreate).getTime() - new Date(Date.now()).getTime() > 0;
   }
   static TimeDiff(timecreate) {
     return new Date(timecreate).getTime() - new Date(Date.now());

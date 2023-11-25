@@ -8,6 +8,7 @@ const EventRouter = express.Router();
 EventRouter.get("/", MiddleWare.handleTryCate(EventController.GetAll))
   .get("/:slug", MiddleWare.handleTryCate(EventController.GetOne))
   .post("/new", MiddleWare.handleTryCate(EventController.GetViewNewScreen))
+  .post("/search", MiddleWare.handleTryCate(EventController.Search))
   .post("/slug", MiddleWare.handleTryCate(EventController.GetAllSlug))
   .post("/", MiddleWare.handleTryCate(EventController.Create))
   .put("/", MiddleWare.handleTryCate(EventController.Edit))

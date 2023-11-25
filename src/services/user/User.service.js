@@ -13,19 +13,17 @@ import OrderModal from "../../models/order.model";
 import OrderDetailModal from "../../models/orderDetail.modal";
 import CategoryModal from "../../models/cate.model";
 
-export const CreateNotice = async ({
-  title = "",
-  content = "",
-  receiver_id,
-  user_id,
-  isSee = true,
-}) => {
+export const CreateNotice = async (
+  { title = "", content = "", receiver_id, user_id, isSee = true },
+  link = ""
+) => {
   return await NoticeModal.create({
     title,
     content,
     receiver_id,
     user_id,
     isSee,
+    link,
   });
 };
 class UserService {
@@ -534,6 +532,32 @@ class UserService {
     });
 
     return DataResponse("account", 200, "Xóa Thành công");
+  }
+  async Search(text) {
+    const listAccounts = await UserModel.findAll({
+      where: {
+        [Op.or]: {
+          email: {
+            [Op.substring]: text,
+          },
+          fullname: {
+            [Op.substring]: text,
+          },
+          role: {
+            [Op.substring]: text,
+          },
+        },
+      },
+
+      order: [["updatedAt", "DESC"]],
+      limit: 10,
+    });
+
+    return DataResponse(
+      { users: listAccounts },
+      200,
+      "Tìm kiếm  tài khoản thành công"
+    );
   }
 }
 

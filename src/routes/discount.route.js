@@ -9,6 +9,7 @@ DiscountRouter.get(
   "/",
   middlewares.handleTryCate(DiscountController.GetAllDiscount)
 )
+  .post("/search", middlewares.handleTryCate(DiscountController.Search))
   .post("/", middlewares.handleTryCate(DiscountController.AddDiscount))
   .post("/verify", middlewares.handleTryCate(DiscountController.checkoutCode))
   .put("/", middlewares.handleTryCate(DiscountController.UpdateDiscount))

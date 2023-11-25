@@ -10,6 +10,41 @@ import CloudinaryServices from "../cloudinary.services";
 import { Op } from "sequelize";
 
 class ProductServices {
+  async SearchProduct(text) {
+    const listProductSearch = await ProductModal.findAll({
+      where: {
+        [Op.or]: {
+          name: {
+            [Op.substring]: text,
+          },
+          description: {
+            [Op.substring]: text,
+          },
+          price: {
+            [Op.substring]: text,
+          },
+        },
+      },
+      include: [
+        {
+          model: UserModel,
+          attributes: ["id", "fullname", "avatar"],
+        },
+        {
+          model: CategoryModal,
+          attributes: ["id", "name", "slug"],
+        },
+      ],
+      order: [["updatedAt", "DESC"]],
+      limit: 10,
+    });
+
+    return DataResponse(
+      { products: listProductSearch },
+      200,
+      "Tìm kiếm sản phẩm thành công"
+    );
+  }
   async GetAllAdmin() {
     const listProduct = await ProductModal.findAll({
       include: [

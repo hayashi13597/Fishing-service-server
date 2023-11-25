@@ -39,8 +39,8 @@
 </html>
 <script>
   function TimeEnd(timecreate) {
-    return new Date(timecreate).getTime() - new Date(Date.now()) > 0;
+    return new Date(timecreate).getTime() - new Date(Date.now()).getTime() ;
   }
 
-  console.log(TimeEnd("2023-10-22T01:56:34.475z"));
+  console.log(TimeEnd("2023-11-26T01:56:34.475z"));
 </script>

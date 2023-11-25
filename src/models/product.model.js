@@ -20,7 +20,7 @@ const ProductModal = sequelize.define(
       defaultValue: 0,
     },
     description: {
-      type: DataTypes.STRING,
+      type: DataTypes.TEXT,
       required: true,
     },
     content: {

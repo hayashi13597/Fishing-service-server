@@ -34,5 +34,10 @@ class EventController {
     const data = await EventServices.Delete(id);
     res.status(200).json(data);
   }
+  async Search(req, res) {
+    const { search } = req.body.data;
+    const data = await EventServices.Search(search);
+    res.status(200).json(data);
+  }
 }
 export default new EventController();

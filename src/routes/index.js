@@ -6,6 +6,7 @@ import DiscountRouter from "./discount.route";
 import OrderRouter from "./order.route";
 import EventRouter from "./event.route";
 import ContactRouter from "./contact.route";
+import ReviewRouter from "./review.route";
 const AllRouter = (app) => {
   app.use("/user", UserRouter);
 
@@ -22,6 +23,7 @@ const AllRouter = (app) => {
   app.use("/event", EventRouter);
 
   app.use("/contact", ContactRouter);
+  app.use("/review", ReviewRouter);
 };
 ContactRouter;
 export default AllRouter;
