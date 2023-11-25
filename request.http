@@ -486,6 +486,5 @@ Content-Type: application/json
    }
 }
 
-### lấy hết
-DELETE  {{domain}}/review/1
+### lxóa reviewDELETE  {{domain}}/review/1
 
