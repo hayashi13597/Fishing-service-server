@@ -20,9 +20,7 @@ class OrderController {
     res.status(200).json(data);
   }
   async GetOrderDetail(req, res) {
-    //post
     const { order_id } = req.body.data;
-
     const data = await OrderServices.GetOrderDetail(order_id);
     res.status(200).json(data);
   }
@@ -32,6 +30,7 @@ class OrderController {
     res.status(201).json(data);
   }
   async DeleteOrder(req, res) {
+    imageUrl;
     const { id } = req.params;
     const data = await OrderServices.DeleteOrder(id);
     res.status(200).json(data);

@@ -6,6 +6,7 @@ import Util from "../../utils";
 import CloudinaryServices from "../cloudinary.services";
 import { Op } from "sequelize";
 import { CreateNotice } from "../user/User.service";
+import sequelize from "../../models";
 class EventService {
   async GetAll() {
     const listEvents = await EventModal.findAll({
@@ -64,6 +65,30 @@ class EventService {
       ],
       order: [["views", "DESC"]],
     });
+    const listSame = await EventModal.findAll({
+      limit: 6,
+      attributes: [
+        "title",
+        "description",
+        "imageUrl",
+        "updatedAt",
+        "slug",
+        "id",
+      ],
+      where: {
+        slug: {
+          [Op.not]: slug,
+        },
+        isEvent: EventItems.isEvent,
+      },
+      include: [
+        {
+          model: UserModel,
+          attributes: ["fullname", "avatar"],
+        },
+      ],
+      order: sequelize.random(),
+    });
     await EventModal.increment(
       { views: +1 },
       {
@@ -77,6 +102,7 @@ class EventService {
       {
         event: EventItems,
         listNewsTop,
+        listSame,
       },
       200,
       "Lấy danh sách events thành công"
@@ -282,9 +308,20 @@ class EventService {
       order: [["updatedAt", "DESC"]],
       limit: 10,
     });
-
+    const total = await EventModal.count({
+      where: {
+        [Op.or]: {
+          title: {
+            [Op.substring]: text,
+          },
+          description: {
+            [Op.substring]: text,
+          },
+        },
+      },
+    });
     return DataResponse(
-      { events: listEVents },
+      { events: listEVents, total },
       200,
       "Tìm kiếm tin tức thành công"
     );

@@ -36,4 +36,25 @@ const subscriber = createClient({
     await MailService.MailContact(email, title, content);
     console.log(`message: ${message} with channel: ${channel}`);
   });
+  subscriber.subscribe("order", async (message, channel) => {
+    const {
+      listProduct = [],
+      email,
+      total,
+      address,
+      payment_method,
+      shipping_fee,
+      code,
+    } = JSON.parse(message);
+    await MailService.Order(
+      listProduct,
+      email,
+      total,
+      address,
+      payment_method,
+      shipping_fee,
+      code
+    );
+    console.log(` with channel: ${channel}`);
+  });
 })();

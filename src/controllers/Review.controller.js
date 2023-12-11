@@ -6,7 +6,7 @@ class ReviewController {
     const data = await ReviewServices.GetAll(limit, skip);
     res.status(200).json(data);
   }
-  Edit(req, res) {}
+
   async Create(req, res) {
     const {
       star,
@@ -24,14 +24,35 @@ class ReviewController {
     );
     res.status(201).json(data);
   }
+  async HandleEvaluate(req, res) {
+    const { id, star, content, idProduct } = req.body.data;
+    const data = await ReviewServices.HandleEvaluate(
+      id,
+      idProduct,
+      star,
+      content
+    );
+    res.status(201).json(data);
+  }
   async GetOne(req, res) {
     const id = req.params.productId;
-    const data = await ReviewServices.GetOne(id);
+    const { limit = 6, skip = 0, star = "all" } = req.query;
+    const data = await ReviewServices.GetOne(
+      id,
+      star,
+      parseInt(limit),
+      parseInt(skip)
+    );
     res.status(200).json(data);
   }
   async Delete(req, res) {
     const id = req.params.id;
     const data = await ReviewServices.DeleteReview(id);
+    res.status(200).json(data);
+  }
+  async GetOrderReviews(req, res) {
+    const { id, limit = 6, skip = 0 } = req.body.data;
+    const data = await ReviewServices.GetDetailListReview(id, limit, skip);
     res.status(200).json(data);
   }
 }

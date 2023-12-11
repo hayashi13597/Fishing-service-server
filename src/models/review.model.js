@@ -8,7 +8,7 @@ const ReviewModal = sequelize.define(
   {
     content: {
       type: DataTypes.TEXT,
-      allowNull: false,
+      defaultValue: "",
     },
     listImage: {
       type: DataTypes.TEXT,
@@ -19,14 +19,19 @@ const ReviewModal = sequelize.define(
       defaultValue: false,
     },
     star: {
-      type: DataTypes.FLOAT,
+      type: DataTypes.INTEGER,
       allowNull: false,
+      defaultValue: 5,
     },
     user_id: {
       type: DataTypes.INTEGER,
     },
     product_id: {
       type: DataTypes.INTEGER,
+    },
+    quantity: {
+      type: DataTypes.INTEGER,
+      defaultValue: 1,
     },
   },
   { timestamps: true, freezeTableName: true }

@@ -229,7 +229,7 @@ class UserService {
         "Đăng nhập  quản trị viên thành công"
       );
     } else {
-      return DataResponse("", 400, "Mật khẩu không chính xác");
+      throw new Error("Mật khẩu không chính xác");
     }
   }
   async AdminFirstLogin(accessToken) {
@@ -310,8 +310,9 @@ class UserService {
     });
 
     account = Util.coverDataFromSelect(account);
-
-    if (!account || !account.password) {
+    if (!account.visiable) {
+      throw new Error("Tài khoản đã bị khóa");
+    } else if (!account || !account.password) {
       throw new Error("Tài khoản không tồn tại");
     }
     const isCheckPassword = await AuthServices.verifyHash(
@@ -331,7 +332,7 @@ class UserService {
       );
       return DataResponse({ account, notices }, 200, "Đăng nhập thành công");
     } else {
-      return DataResponse("", 404, "Mật khẩu không chính xác");
+      throw new Error("Mật khẩu không chính xác");
     }
   }
   async UpdateProfile(id, profiledata) {

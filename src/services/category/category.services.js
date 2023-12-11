@@ -47,6 +47,7 @@ class CategoryServices {
     return DataResponse({ category }, 200, "Lấy thành công danh muc SEO");
   }
   async GetOneSlug(slug, limit, skip) {
+    console.log(slug, limit, skip);
     let category = await CategoryModal.findOne({
       where: {
         slug,
@@ -81,8 +82,8 @@ class CategoryServices {
       ],
 
       order: [["view", "DESC"]],
-      offset: skip,
-      limit,
+      limit: parseInt(limit),
+      offset: parseInt(skip),
     });
     const totalProductFollowCate = await ProductModal.count({
       where: {
@@ -140,8 +141,8 @@ class CategoryServices {
       attributes: ["id"],
     });
     listProduct = Util.coverDataFromSelect(listProduct);
-    listProduct
-      .forEach((item) => {
+    listProduct.length &&
+      listProduct.forEach((item) => {
         Promise.resolve(() => {
           const idTimeOut = setTimeout(() => {
             clearTimeout(idTimeOut);
@@ -152,10 +153,8 @@ class CategoryServices {
             });
           }, [2000]);
         });
-      })
-      .then(() => {
-        console.log("Xóa thành công");
       });
+
     await ProductModal.destroy({
       where: {
         category_id: id,

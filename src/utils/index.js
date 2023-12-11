@@ -20,7 +20,7 @@ class Util {
     return new Date(timecreate).getTime() - new Date(Date.now()).getTime() > 0;
   }
   static TimeDiff(timecreate) {
-    return new Date(timecreate).getTime() - new Date(Date.now());
+    return new Date(timecreate).getTime() - new Date(Date.now()).getTime();
   }
   static GenerateDiscountCode(maxlength = 6) {
     const characters =

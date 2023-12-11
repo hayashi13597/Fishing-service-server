@@ -1,28 +1,42 @@
 import { coverSlug } from "react-swisskit";
-import productServices from "../services/products/product.services";
+import ProductServices from "../services/products/product.services";
 
 class ProductController {
   async GetAllAdmin(_, res) {
-    const data = await productServices.GetAllAdmin();
+    const data = await ProductServices.GetAllAdmin();
+    res.status(200).json(data);
+  }
+  async GetChartAdmin(_, res) {
+    const data = await ProductServices.GetChartAdmin();
     res.status(200).json(data);
   }
   async GetAllSlug(_, res) {
     console.log("đang lấy danh sách slug");
-    const data = await productServices.GetAllSlug();
+    const data = await ProductServices.GetAllSlug();
     res.status(200).json(data);
   }
   async GetOne(req, res) {
     const { slug } = req.params;
-    const data = await productServices.GetOne(slug);
+    const data = await ProductServices.GetOne(slug);
     res.status(200).json(data);
   }
   async GetOneToSeo(req, res) {
     const { slug } = req.params;
-    const data = await productServices.GetOneToSeo(slug);
+    const data = await ProductServices.GetOneToSeo(slug);
+    res.status(200).json(data);
+  }
+  async GetFilterProduct(req, res) {
+    const { idCate = "", filter = "", limit = 8, skip = 0 } = req.query;
+    const data = await ProductServices.GetFilterProduct(
+      idCate,
+      filter,
+      parseInt(limit),
+      parseInt(skip)
+    );
     res.status(200).json(data);
   }
   async GetViewHomeClient(req, res) {
-    const data = await productServices.GetViewHomeClient();
+    const data = await ProductServices.GetViewHomeClient();
     res.status(200).json(data);
   }
   async Create(req, res) {
@@ -41,7 +55,7 @@ class ProductController {
     } = req.body.data;
 
     const slug = coverSlug(name);
-    const data = await productServices.Create(user_id, category_id, {
+    const data = await ProductServices.Create(user_id, category_id, {
       idPath,
       price,
       name,
@@ -61,7 +75,7 @@ class ProductController {
     if (product && product?.name) {
       product.slug = coverSlug(product.name);
     }
-    const data = await productServices.Update(id, product);
+    const data = await ProductServices.Update(id, product);
     res.status(200).json(data);
   }
   async UpdateSubImage(req, res) {
@@ -69,17 +83,17 @@ class ProductController {
     if (!id || !idPath) {
       throw new Error("Thiếu dữ liệu");
     }
-    const data = await productServices.UpdateSubImage(id, idPath);
+    const data = await ProductServices.UpdateSubImage(id, idPath);
     res.status(200).json(data);
   }
   async Delete(req, res) {
     const id = req.params.id;
-    const data = await productServices.Delete(id);
+    const data = await ProductServices.Delete(id);
     res.status(200).json(data);
   }
   async Search(req, res) {
-    const { search } = req.body.data;
-    const data = await productServices.SearchProduct(search);
+    const { search, limit = 12, skip = 0 } = req.body.data;
+    const data = await ProductServices.SearchProduct(search, limit, skip);
     res.status(200).json(data);
   }
 }

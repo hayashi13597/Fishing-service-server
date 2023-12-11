@@ -1,10 +1,5 @@
-import AuthServices from "..";
-import UserModel from "../../models/user.model";
-
 import { DataResponse } from "../../middlewares";
-import Util from "../../utils";
-import CloudinaryServices from "../cloudinary.services";
-import casual from "casual";
+
 import NoticeModal from "../../models/notice.model";
 import { Op } from "sequelize";
 class NoticeServices {
@@ -54,6 +49,24 @@ class NoticeServices {
       200,
       "Lấy danh sách thông báo thành công"
     );
+  }
+  async CleanOne(id) {
+    const data = await NoticeModal.destroy({
+      where: {
+        receiver_id: id,
+      },
+    });
+    if (!data) {
+      throw new Error("Không còn thông báo nào để xóa");
+    }
+    return DataResponse("", 200, "Xóa thông báo của tài khoản thành công");
+  }
+  async CleanAllNotice() {
+    const data = await NoticeModal.destroy({ where: {} });
+    if (!data) {
+      throw new Error("Không còn thông báo nào để xóa");
+    }
+    return DataResponse("", 200, "Xóa tất cả thông báo thành công");
   }
 }
 

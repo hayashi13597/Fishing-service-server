@@ -18,24 +18,29 @@ class UserController {
     res.status(200).json(data);
   }
   async GeAllUserDashboard(req, res) {
-    const accounts = await UserModel.findAll({
-      attributes: [
-        "id",
-        "email",
-        "fullname",
-        "avatar",
-        "role",
-        "visiable",
-        "createdAt",
-        "updatedAt",
-        "address",
-      ],
-      order: [["createdAt", "DESC"]],
-    });
+    const { limit = 6, skip = 0 } = req.query;
+    const [total, accounts] = await Promise.all([
+      UserModel.count(),
+      UserModel.findAll({
+        attributes: [
+          "id",
+          "email",
+          "fullname",
+          "avatar",
+          "role",
+          "visiable",
+          "createdAt",
+          "updatedAt",
+          "address",
+        ],
+        order: [["createdAt", "DESC"]],
+      }),
+    ]);
+
     const data = DataResponse(
-      { accounts: accounts },
+      { accounts: accounts, total },
       200,
-      "Lấy danh sách tài khoảng"
+      "Lấy danh sách tài khoản thành công"
     );
     res.status(201).json(data);
   }

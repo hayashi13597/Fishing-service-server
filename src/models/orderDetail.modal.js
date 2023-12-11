@@ -13,7 +13,7 @@ const OrderDetailModal = sequelize.define(
     },
     price: {
       type: DataTypes.INTEGER,
-      defaultValue: 0,
+      defaultValue: 1,
     },
 
     product_id: {
@@ -34,6 +34,9 @@ OrderDetailModal.belongsTo(ProductModal, {
   foreignKey: { name: "product_id", allowNull: true },
 });
 OrderModal.hasMany(OrderDetailModal, {
+  foreignKey: { name: "order_id", allowNull: true },
+});
+OrderDetailModal.belongsTo(OrderModal, {
   foreignKey: { name: "order_id", allowNull: true },
 });
 OrderDetailModal.sync({ alter: true });

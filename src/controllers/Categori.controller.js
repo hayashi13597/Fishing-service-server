@@ -8,7 +8,7 @@ class CategoryController {
   }
   async GetOneSlug(req, res) {
     const { slug } = req.params;
-    const { limit = 12, skip = 0 } = req.query;
+    const { limit = 8, skip = 0 } = req.body.data;
     const data = await categoryServices.GetOneSlug(slug, limit, skip);
     res.status(200).json(data);
   }
@@ -22,6 +22,7 @@ class CategoryController {
     const data = await categoryServices.GetOneSlugSeo(slug);
     res.status(200).json(data);
   }
+
   async Create(req, res) {
     const {
       user_id,

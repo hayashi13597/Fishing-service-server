@@ -6,6 +6,7 @@ GET {{domain}}/user
 Content-Type: application/json
 ###  lấy thong tin cho trang dashboard
 GET {{domain}}/user/dashboard
+Authorization: "Bear  asdsa dsa"
 Content-Type: application/json
 
 
@@ -16,7 +17,7 @@ Content-Type: application/json
 {
  "data":{
 "fullname":"Quản trị viên",
-"email":"admin@gmail.com",
+"email":"hophuclam@gmail.com",
 "password":"123456"
   }
 }
@@ -274,7 +275,16 @@ GET {{domain}}/product/admin
 GET {{domain}}/product/allslug
 ### Lấy tất cả sản phẩm
 
-### tìm kiếm sản phẩm
+### Lấy product chart
+GET {{domain}}/product/chart
+
+
+### Lấy tất sna3 phẩm lọc
+GET {{domain}}/product/filter?idCate=1
+### Lấy tất cả sản 
+
+
+### tìm kiếm sản phẩmhttp://localhost:3000/
 POST {{domain}}/product/search
 Content-Type: application/json
 
@@ -374,7 +384,7 @@ Content-Type: application/json
 
 {
    "data":  {
-    "code": "EMun7k"
+    "code": "b6Xp0B"
 
    }
 }
@@ -471,20 +481,43 @@ GET {{domain}}/notice?id=2&limit=2&skip=5
 ### lấy hết
 GET {{domain}}/review?id=2&limit=2&skip=5
 ###
-GET {{domain}}/review/3
+GET {{domain}}/review/3?star=5
+
+###  lấy danh sách đánh giá sản phẩm
+POST {{domain}}/review/order
+Content-Type: application/json
+
+{
+   "data":{
+      "id":2
+   }
+}
+
 ### Thêm mới
 POST {{domain}}/review
 Content-Type: application/json
 
 {
    "data":{
-      "star":2,
-      "user_id":2,
+      "star":5,
+      "user_id":1,
       "product_id":3,
-      "content" : "Sản phâm tuyệt vời quá",
-      "listImage" : ""
+      "content" : "Sản phâm tuyệt vời quá"
+ 
    }
 }
+### Thêm mới
+POST {{domain}}/review
+Content-Type: application/json
 
+{
+   "data":{
+      "star":5,
+      "user_id":2,
+      "product_id":2,
+      "content" : "Sản phâm tuyệt vời quá"
+ 
+   }
+}
 ### lxóa reviewDELETE  {{domain}}/review/1
 

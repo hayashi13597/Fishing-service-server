@@ -1,9 +1,9 @@
 import { v2 as cloudinary } from "cloudinary";
 import fs from "fs";
 cloudinary.config({
-  cloud_name: "dcsfwpkiq",
-  api_key: "988698536798941",
-  api_secret: "3uyMaSiQ_E5x219PNy-mh9o4gMc",
+  cloud_name: process.env.CLOUNDINARY_NAME || "dcsfwpkiq",
+  api_key: process.env.CLOUNDINARY_KEY || "988698536798941",
+  api_secret: process.env.CLOUNDINARY_SECRET || "3uyMaSiQ_E5x219PNy-mh9o4gMc",
   secure: true,
 });
 

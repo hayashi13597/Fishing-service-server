@@ -12,7 +12,7 @@ class DiscountController {
       },
     });
     discountItem = Util.coverDataFromSelect(discountItem);
-    console.log(discountItem);
+
     if (!discountItem) {
       throw new Error("Mã giảm giá không tồn tại");
     } else if (discountItem.expirydate) {
@@ -32,7 +32,15 @@ class DiscountController {
     } else if (discountItem.status) {
       throw new Error("Mã giảm giá đã sử dụng rồi");
     }
-    res.status(200).json(DataResponse({}, 200, "Bạn có thể sử dụng mã này"));
+    res
+      .status(200)
+      .json(
+        DataResponse(
+          { value: discountItem.value },
+          200,
+          "Bạn có thể sử dụng mã này"
+        )
+      );
   }
   async GetAllDiscount(req, res) {
     const { limit = 5, skip = 0 } = req.query;

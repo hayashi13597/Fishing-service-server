@@ -1,23 +1,28 @@
 import express from "express";
 import OrderController from "../controllers/Order.controller";
-import middlewares from "../middlewares";
-
+import MiddleWare from "../middlewares";
+import AccuracyPerson from "../middlewares/auth/Authen";
 const OrderRouter = express.Router();
 //order
 
 OrderRouter.get(
   "/detail",
-  middlewares.handleTryCate(OrderController.GetListOrderClient)
+  MiddleWare.handleTryCate(OrderController.GetListOrderClient)
 )
-  .get("/", middlewares.handleTryCate(OrderController.GetAllOrderAdmin))
-  .post("/", middlewares.handleTryCate(OrderController.GetOrderDetail))
-  .post("/search", middlewares.handleTryCate(OrderController.Search))
-  .patch("/", middlewares.handleTryCate(OrderController.Edit))
-  .post("/create", middlewares.handleTryCate(OrderController.CreateOrder))
-  .delete("/:id", middlewares.handleTryCate(OrderController.DeleteOrder))
+  .get("/", MiddleWare.handleTryCate(OrderController.GetAllOrderAdmin))
+  .post("/", MiddleWare.handleTryCate(OrderController.GetOrderDetail))
+  .post("/search", MiddleWare.handleTryCate(OrderController.Search))
+  .patch("/", MiddleWare.handleTryCate(OrderController.Edit))
+  .post("/create", MiddleWare.handleTryCate(OrderController.CreateOrder))
+  .delete(
+    "/:id",
+    MiddleWare.handleTryCate(AccuracyPerson.Authentication),
+    MiddleWare.handleTryCate(OrderController.DeleteOrder)
+  )
   .delete(
     "/detail/:id",
-    middlewares.handleTryCate(OrderController.DeleteOrderDetails)
+    MiddleWare.handleTryCate(AccuracyPerson.Authentication),
+    MiddleWare.handleTryCate(OrderController.DeleteOrderDetails)
   );
 
 export default OrderRouter;

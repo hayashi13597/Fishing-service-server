@@ -3,6 +3,7 @@ import UserController from "../controllers/User.controller";
 import MiddleWare from "../middlewares";
 import multer from "multer";
 import path from "path";
+import AccuracyPerson from "../middlewares/auth/Authen";
 const UserRouter = express.Router();
 
 // SET STORAGE
@@ -18,9 +19,14 @@ export const storage = multer.diskStorage({
 
 const UploadStore = multer({ storage: storage });
 //user
-UserRouter.get("", MiddleWare.handleTryCate(UserController.GeAllUserDashboard))
+UserRouter.get(
+  "",
+  MiddleWare.handleTryCate(AccuracyPerson.Authorization),
+  MiddleWare.handleTryCate(UserController.GeAllUserDashboard)
+)
   .get(
     "/dashboard",
+    MiddleWare.handleTryCate(AccuracyPerson.Authorization),
     MiddleWare.handleTryCate(UserController.AdminScreenDashboard)
   )
   .post("/adminlogin", MiddleWare.handleTryCate(UserController.AdminLogin))
@@ -30,6 +36,7 @@ UserRouter.get("", MiddleWare.handleTryCate(UserController.GeAllUserDashboard))
   )
   .post(
     "/rerespassword",
+    MiddleWare.handleTryCate(AccuracyPerson.Authorization),
     MiddleWare.handleTryCate(UserController.ResetPassword)
   )
   .post("/search", MiddleWare.handleTryCate(UserController.Search))
@@ -41,6 +48,7 @@ UserRouter.get("", MiddleWare.handleTryCate(UserController.GeAllUserDashboard))
   .post("/firstlogin", MiddleWare.handleTryCate(UserController.FirstLogin)) // login with token
   .post(
     "/changepassword",
+    MiddleWare.handleTryCate(AccuracyPerson.Authentication),
     MiddleWare.handleTryCate(UserController.ChangePassword)
   ) // thay đổi mật mật khảu
   .post(
@@ -48,12 +56,20 @@ UserRouter.get("", MiddleWare.handleTryCate(UserController.GeAllUserDashboard))
     UploadStore.single("file"),
     MiddleWare.handleTryCate(UserController.ChangeAvatar)
   )
-  .post("/resetavatar", MiddleWare.handleTryCate(UserController.ResetAvatar))
+  .post(
+    "/resetavatar",
+    MiddleWare.handleTryCate(AccuracyPerson.Authentication),
+    MiddleWare.handleTryCate(UserController.ResetAvatar)
+  )
   .post("/misspassword", MiddleWare.handleTryCate(UserController.MissPassword))
   .post(
     "/verifycode",
     MiddleWare.handleTryCate(UserController.CheckCodeMissPassword)
   )
-  .delete("/:userid", MiddleWare.handleTryCate(UserController.DeleteUser));
+  .delete(
+    "/:userid",
+    MiddleWare.handleTryCate(AccuracyPerson.Authorization),
+    MiddleWare.handleTryCate(UserController.DeleteUser)
+  );
 
 export default UserRouter;

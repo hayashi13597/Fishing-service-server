@@ -4,12 +4,13 @@ import DiscountModel from "../../models/discount.model";
 import OrderModal from "../../models/order.model";
 import OrderDetailModal from "../../models/orderDetail.modal";
 import ProductModal from "../../models/product.model";
-import { CreateNotice } from "../user/User.service";
+import UserService, { CreateNotice } from "../user/User.service";
 import Util from "../../utils";
 import CategoryModal from "../../models/cate.model";
-import NoticeModal from "../../models/notice.model";
+import RedisServer from "../../redis/redis.config";
 import UserModel from "../../models/user.model";
 import { Op } from "sequelize";
+import ReviewModal from "../../models/review.model";
 const StatusPay = {
   s1: "Chờ xử lý",
   s2: "Đã kiểm duyệt",
@@ -125,6 +126,27 @@ class OrderServices {
     );
   }
   async CreateOrder(order, order_detail = []) {
+    const user_id = order.user_id;
+    if (!user_id) {
+      throw new Error("Bạn chưa đăng nhập");
+    }
+    let account = UserModel.findByPk(user_id);
+    if (!account) {
+      throw new Error("Tài khoản không tồn tại");
+    }
+    account = Util.coverDataFromSelect(account);
+    const { fullname, address, phone, total, payment_method, shipping_fee } =
+      order;
+    if (!fullname || !address || !phone) {
+      throw new Error("Dữ liệu bị thiếu");
+    }
+    if (account.phone || account.address) {
+      // cập nhập tài khoản
+      await UserService.UpdateProfile(account.id, {
+        address,
+        phone,
+      });
+    }
     if (order_detail?.length < 0) {
       throw new Error("Chưa có đơn hàng nào");
     }
@@ -133,7 +155,7 @@ class OrderServices {
       const findDiscount = await DiscountModel.findByPk(order.discount_id);
 
       if (!findDiscount) {
-        order.discount_id = 1;
+        delete order.discount_id;
       } else {
         order.discount_id = findDiscount.id;
         order.discount = findDiscount.value;
@@ -147,7 +169,7 @@ class OrderServices {
         );
       }
     } else {
-      order.discount_id = 1;
+      delete order.discount_id;
     }
     order.codebill = Util.GenerateDiscountCode(10);
     const CreateOrder = await OrderModal.create(order);
@@ -163,7 +185,26 @@ class OrderServices {
         product_id: item.id,
       });
       listOrderDetail.push(newOrderItem);
+      await ReviewModal.create({
+        user_id: order.user_id,
+        product_id: item.id,
+        quantity: item.quantity,
+      });
     });
+    try {
+      RedisServer.publish(
+        "order",
+        JSON.stringify({
+          listProduct: order_detail,
+          email: order.email,
+          total,
+          address,
+          payment_method,
+          shipping_fee,
+          code: CreateOrder?.codebill,
+        })
+      );
+    } catch (error) {}
     const notice = await CreateNotice({
       receiver_id: order.user_id,
       title: "Đặt đơn hàng thành công",

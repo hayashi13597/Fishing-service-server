@@ -1,21 +1,31 @@
 import express from "express";
 import DiscountController from "../controllers/DiscountController";
-import middlewares from "../middlewares";
-
+import MiddleWare from "../middlewares";
+import AccuracyPerson from "../middlewares/auth/Authen";
 const DiscountRouter = express.Router();
 //discount
 
 DiscountRouter.get(
   "/",
-  middlewares.handleTryCate(DiscountController.GetAllDiscount)
+  MiddleWare.handleTryCate(AccuracyPerson.Authorization),
+  MiddleWare.handleTryCate(DiscountController.GetAllDiscount)
 )
-  .post("/search", middlewares.handleTryCate(DiscountController.Search))
-  .post("/", middlewares.handleTryCate(DiscountController.AddDiscount))
-  .post("/verify", middlewares.handleTryCate(DiscountController.checkoutCode))
-  .put("/", middlewares.handleTryCate(DiscountController.UpdateDiscount))
+  .post("/search", MiddleWare.handleTryCate(DiscountController.Search))
+  .post(
+    "/",
+    MiddleWare.handleTryCate(AccuracyPerson.Authorization),
+    MiddleWare.handleTryCate(DiscountController.AddDiscount)
+  )
+  .post("/verify", MiddleWare.handleTryCate(DiscountController.checkoutCode))
+  .put(
+    "/",
+    MiddleWare.handleTryCate(AccuracyPerson.Authorization),
+    MiddleWare.handleTryCate(DiscountController.UpdateDiscount)
+  )
   .delete(
     "/:discountId",
-    middlewares.handleTryCate(DiscountController.DeleteDiscount)
+    MiddleWare.handleTryCate(AccuracyPerson.Authorization),
+    MiddleWare.handleTryCate(DiscountController.DeleteDiscount)
   );
 
 export default DiscountRouter;

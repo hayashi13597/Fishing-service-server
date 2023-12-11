@@ -8,9 +8,12 @@ import EventModal from "../../models/event.model";
 import Util from "../../utils";
 import CloudinaryServices from "../cloudinary.services";
 import { Op } from "sequelize";
+import sequelize from "../../models";
+import OrderModal from "../../models/order.model";
+import moment from "moment";
 
 class ProductServices {
-  async SearchProduct(text) {
+  async SearchProduct(text, limit, skip) {
     const listProductSearch = await ProductModal.findAll({
       where: {
         [Op.or]: {
@@ -36,11 +39,26 @@ class ProductServices {
         },
       ],
       order: [["updatedAt", "DESC"]],
-      limit: 10,
+      limit: limit,
+      offset: skip,
     });
-
+    const total = await ProductModal.count({
+      where: {
+        [Op.or]: {
+          name: {
+            [Op.substring]: text,
+          },
+          description: {
+            [Op.substring]: text,
+          },
+          price: {
+            [Op.substring]: text,
+          },
+        },
+      },
+    });
     return DataResponse(
-      { products: listProductSearch },
+      { products: listProductSearch, total },
       200,
       "Tìm kiếm sản phẩm thành công"
     );
@@ -117,18 +135,31 @@ class ProductServices {
         order: [["createdAt", "DESC"]],
       }),
       EventModal.findAll({
-        limit: 2,
-
-        where: {
-          isEvent: false,
-        },
+        limit: 8,
+        include: [
+          {
+            model: UserModel,
+            attributes: ["id", "fullname", "avatar"],
+          },
+        ],
         order: [["createdAt", "DESC"]],
+        attributes: {
+          exclude: ["content"],
+        },
       }),
       EventModal.findAll({
         limit: 2,
-
         where: {
           isEvent: true,
+        },
+        include: [
+          {
+            model: UserModel,
+            attributes: ["id", "fullname", "avatar"],
+          },
+        ],
+        attributes: {
+          exclude: ["content"],
         },
         order: [["createdAt", "DESC"]],
       }),
@@ -359,5 +390,171 @@ class ProductServices {
     });
     return DataResponse({}, 200, "Xóa sản phẩm thành công");
   }
+  async GetFilterProduct(idCate, filter, limit, skip) {
+    let total = 0;
+    let listProducts = [];
+    let optionsFilter = [["createdAt", "DESC"]];
+    if (filter) {
+      switch (filter) {
+        case "za":
+          optionsFilter = [["name", "DESC"]];
+          break;
+        case "az":
+          optionsFilter = [["name", "ASC"]];
+          break;
+        case "lowest":
+          optionsFilter = [["price", "ASC"]];
+          break;
+        case "hightest":
+          optionsFilter = [["price", "DESC"]];
+          break;
+      }
+    }
+    if (idCate && filter) {
+      [total, listProducts] = await Promise.all([
+        ProductModal.count({
+          where: {
+            category_id: idCate,
+          },
+          order: optionsFilter,
+        }),
+        ProductModal.findAll({
+          where: {
+            category_id: idCate,
+          },
+          include: [
+            {
+              model: CategoryModal,
+              attributes: ["id", "name", "slug"],
+            },
+            {
+              model: UserModel,
+              attributes: ["id", "fullname", "avatar"],
+            },
+          ],
+          attributes: {
+            exclude: ["content"],
+          },
+          limit,
+          offset: skip,
+          order: optionsFilter,
+        }),
+      ]);
+    } else if (idCate) {
+      [total, listProducts] = await Promise.all([
+        ProductModal.count({
+          where: {
+            category_id: idCate,
+          },
+        }),
+        ProductModal.findAll({
+          include: [
+            {
+              model: CategoryModal,
+              attributes: ["id", "name", "slug"],
+            },
+            {
+              model: UserModel,
+              attributes: ["id", "fullname", "avatar"],
+            },
+          ],
+          attributes: {
+            exclude: ["content"],
+          },
+          where: {
+            category_id: idCate,
+          },
+          limit,
+          offset: skip,
+        }),
+      ]);
+    } else {
+      [total, listProducts] = await Promise.all([
+        ProductModal.count({
+          order: optionsFilter,
+        }),
+        ProductModal.findAll({
+          include: [
+            {
+              model: CategoryModal,
+              attributes: ["id", "name", "slug"],
+            },
+            {
+              model: UserModel,
+              attributes: ["id", "fullname", "avatar"],
+            },
+          ],
+          attributes: {
+            exclude: ["content"],
+          },
+          limit,
+          offset: skip,
+          order: optionsFilter,
+        }),
+      ]);
+    }
+    return DataResponse(
+      { products: listProducts, total },
+      200,
+      "Lấy danh sách sản phẩm thành công"
+    );
+  }
+  async GetChartAdmin() {
+    let listOrderStatus = await OrderModal.findAll({
+      where: {
+        status: "s4",
+      },
+      attributes: ["id"],
+    });
+    listOrderStatus = listOrderStatus.map((item) => item.id);
+    const listData = await Promise.all([
+      GetDataFollowMonth(1, listOrderStatus),
+      GetDataFollowMonth(2, listOrderStatus),
+
+      GetDataFollowMonth(3, listOrderStatus),
+      GetDataFollowMonth(4, listOrderStatus),
+
+      GetDataFollowMonth(5, listOrderStatus),
+
+      GetDataFollowMonth(6, listOrderStatus),
+
+      GetDataFollowMonth(7, listOrderStatus),
+
+      GetDataFollowMonth(8, listOrderStatus),
+
+      GetDataFollowMonth(9, listOrderStatus),
+
+      GetDataFollowMonth(10, listOrderStatus),
+      GetDataFollowMonth(11, listOrderStatus),
+      GetDataFollowMonth(12, listOrderStatus),
+    ]);
+    return DataResponse(
+      { listTotal: listData },
+      200,
+      "Lấy danh sách sản phẩm cho chart"
+    );
+  }
+}
+async function GetDataFollowMonth(month, listStatusS4 = []) {
+  const listData = await OrderDetailModal.findAll({
+    where: {
+      createdAt: {
+        [Op.gte]: moment("0101", "MMDD")
+          .add(month - 1, "months")
+          .toDate(),
+        [Op.lt]: moment("0101", "MMDD").add(month, "months").toDate(),
+      },
+      order_id: {
+        [Op.in]: listStatusS4,
+      },
+    },
+  });
+
+  const total = listData.reduce(
+    (total, { price, quantity }) => (total += price * quantity),
+    0
+  );
+
+  return total || 0;
 }
 export default new ProductServices();

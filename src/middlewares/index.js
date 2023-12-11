@@ -14,6 +14,11 @@ const ErrorHandler = (err, res) => {
     res.status(errStatus).json(errMessage);
   } catch {}
 };
+export const Logger = (...message) => {
+  if (process.env?.NODE_ENV === "development") {
+    console.log("===> ", message);
+  }
+};
 export const DataResponse = (data, status = 200, message = "") => {
   return {
     data,
@@ -23,9 +28,9 @@ export const DataResponse = (data, status = 200, message = "") => {
 };
 
 class MiddleWare {
-  handleTryCate = (controller) => async (req, res) => {
+  handleTryCate = (controller) => async (req, res, next) => {
     try {
-      await controller(req, res);
+      await controller(req, res, next);
     } catch (err) {
       await ErrorHandler(err, res);
     }

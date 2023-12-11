@@ -11,7 +11,7 @@ const transporter = nodemailer.createTransport({
     pass: process.env.NODEMAILER_PASSWORD || "tatvcdfftwrtwzwb",
   },
 });
-const EmailSend = "namph2102@gmail.com";
+const EmailSend = process.env.NODEMAILER_USERNAME || "namph2102@gmail.com";
 class MailService {
   async register(email, createdAt) {
     const info = await transporter
@@ -190,6 +190,149 @@ class MailService {
 
     console.log("Message sent: %s", info.messageId);
   }
+  async Order(
+    listProduct = [],
+    email,
+    total,
+    address,
+    payment_method,
+    shipping_fee,
+    code
+  ) {
+    const info = await transporter
+      .sendMail({
+        from: `"${EmailSend} 👻" <${EmailSend}>`, //Địa chỉ gửi
+        to: `${email}`, //  danh sách người nhận
+        subject: `Đơn hàng chi tiết của bạn `, // Tiêu đề
+        text: "Thư liên hệ", // plain text body
+        html: ` <div
+      style="
+        max-width: 600px;
+        margin: 20px auto;
+        background-color: #fff;
+        padding: 20px;
+        border-radius: 8px;
+        box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+      "
+    >
+
+      <h2 style="text-align: center;">Hóa Đơn Chi Tiết - #${code}</h2
+      <table style="width: 100%; border-collapse: collapse; margin-top: 20px">
+        <thead>
+          <tr>
+            <th
+              colspan="2"
+              style="
+                background-color: #f2f2f2;
+                border: 1px solid #ddd;
+                padding: 12px;
+                text-align: center;
+              "
+            >
+              Sản phẩm
+            </th>
+            <th
+              style="
+                background-color: #f2f2f2;
+                border: 1px solid #ddd;
+                padding: 12px;
+                text-align: left;
+              "
+            >
+              Số lượng
+            </th>
+            <th
+              style="
+                background-color: #f2f2f2;
+                border: 1px solid #ddd;
+                padding: 12px;
+                text-align: left;
+              "
+            >
+              Đơn Giá
+            </th>
+            <th
+              style="
+                background-color: #f2f2f2;
+                border: 1px solid #ddd;
+                padding: 12px;
+                text-align: left;
+              "
+            >
+              Tổng Cộng 
+            </th>
+          </tr>
+        </thead>
+        <tbody>
+        ${listProduct
+          .map(
+            (item) => ` <tr>
+            <td style="border: 1px solid #ddd; padding: 12px; text-align: left">
+              <img
+                width="30"
+                height="30"
+                style="object-fit: cover"
+                src="${item.imageUrl}"
+                alt=""
+              />
+            </td>
+            <td style="border: 1px solid #ddd; padding: 12px; text-align: left">
+             ${item.name}
+            </td>
+
+            <td style="border: 1px solid #ddd; padding: 12px; text-align: left">
+               ${item.quantity}
+            </td>
+            <td style="border: 1px solid #ddd; padding: 12px; text-align: left">
+               ${formatMoney(item.price)}
+            </td>
+            <td style="border: 1px solid #ddd; padding: 12px; text-align: left">
+              ${formatMoney(item.quantity * item.price)}
+            </td>
+          </tr>`
+          )
+          .join("")}
+         
+      
+        </tbody>
+      </table>
+
+      <p style="font-weight: bold">Tổng cộng:   ${formatMoney(total)}</p>
+
+      <div style="margin-top: 20px">
+        <p>Phương thức thanh toán: ${payment_method}</p>
+        <p>Phí vận chuyển: ${formatMoney(shipping_fee)}</p>
+        <p>Địa chỉ: ${address}</p>
+      </div>
+
+      <footer style="margin-top: 20px; text-align: center; color: #888">
+        Cảm ơn bạn đã sử dụng dịch vụ của chúng tôi. <br />
+      </footer>
+      <div>
+        <p>Trân trọng,</p>
+        <p>Nguyễn Quốc Trường</p>
+        <p>Hồ câu cá Ốc đảo kỳ đà</p>
+        <p>Địa chỉ email liên hệ: ${EmailSend}</p>
+        <p>Số điện thoại liên hệ: 0347.088.538</p>
+      </div>
+    </div>`,
+      })
+      .catch((err) => {
+        throw new Error(err);
+      });
+
+    console.log("Message sent: %s", info.messageId);
+  }
 }
 
+function formatMoney(price) {
+  if (isNaN(price)) {
+    return price;
+  }
+  return (
+    Math.floor(price)
+      .toString()
+      .replace(/\B(?=(\d{3})+(?!\d))/g, ",") + "đ"
+  );
+}
 export default new MailService();
