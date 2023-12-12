@@ -47,7 +47,6 @@ class CategoryServices {
     return DataResponse({ category }, 200, "Lấy thành công danh muc SEO");
   }
   async GetOneSlug(slug, limit, skip) {
-    console.log(slug, limit, skip);
     let category = await CategoryModal.findOne({
       where: {
         slug,

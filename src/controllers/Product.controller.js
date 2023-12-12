@@ -11,7 +11,6 @@ class ProductController {
     res.status(200).json(data);
   }
   async GetAllSlug(_, res) {
-    console.log("đang lấy danh sách slug");
     const data = await ProductServices.GetAllSlug();
     res.status(200).json(data);
   }

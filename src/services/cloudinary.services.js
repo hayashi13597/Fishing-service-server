@@ -28,7 +28,7 @@ class CloudinaryServices {
     try {
       if (!public_id) throw new Error("public_id Không tồn tại");
       const result = await cloudinary.uploader.destroy(public_id);
-      console.log("Xóa trên cloundy", result);
+
       return true;
     } catch {
       return false;

@@ -8,8 +8,8 @@ const ErrorHandler = (err, res) => {
       message: errMsg,
       // stack: process.env.NODE_ENV === "development" ? err.stack : {},
     };
-    // console.log("======================================");
-    // console.log("Đang Bị lỗi: ", errMessage);
+    Logger("======================================");
+    Logger("Đang Bị lỗi: ", errMessage);
 
     res.status(errStatus).json(errMessage);
   } catch {}
