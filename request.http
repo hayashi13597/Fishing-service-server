@@ -1,5 +1,5 @@
 
-@domain= http://localhost:5000
+@domain= fishing-service-server-production-dc10.up.railway.app
 
 ###  lấy tất cả tài khoảng
 GET {{domain}}/user
@@ -17,7 +17,7 @@ Content-Type: application/json
 {
  "data":{
 "fullname":"Quản trị viên",
-"email":"hophuclam@gmail.com",
+"email":"admin@gmail.com",
 "password":"123456"
   }
 }

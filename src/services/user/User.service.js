@@ -32,7 +32,7 @@ class UserService {
     const isAccount = await UserModel.findOne({ where: { email } });
 
     if (isAccount) throw new Error("Email đã được đăng ký");
-    console.log("isAccount", isAccount);
+
     // tạo token
     const [accessToken, refreshToken, passwordHash] = await Promise.all([
       AuthServices.genarationToken({ email: email }),

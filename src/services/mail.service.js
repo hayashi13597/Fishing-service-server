@@ -1,5 +1,6 @@
 "use strict";
 
+import { Logger } from "../middlewares";
 import Util from "../utils";
 
 const nodemailer = require("nodemailer");
@@ -58,7 +59,7 @@ class MailService {
         throw new Error(err);
       });
 
-    console.log("Message sent: %s", info.messageId); // nếu trả ra id là bạn gửi dúng rồi
+    Logger("Message sent: %s", info.messageId); // nếu trả ra id là bạn gửi dúng rồi
   }
   async missPssword(email, code) {
     const info = await transporter
@@ -115,7 +116,7 @@ class MailService {
         throw new Error(err);
       });
 
-    console.log("Message sent: %s", info.messageId); //  Đả gửi mail nhận mật khẩu
+    Logger("Message sent: %s", info.messageId); //  Đả gửi mail nhận mật khẩu
   }
   async FormContact(email, fullname, phone) {
     const info = await transporter
@@ -162,7 +163,7 @@ class MailService {
         throw new Error(err);
       });
 
-    console.log("Message sent: %s", info.messageId);
+    Logger("Message sent: %s", info.messageId);
   }
   async MailContact(email, title, content) {
     const info = await transporter
@@ -188,7 +189,7 @@ class MailService {
         throw new Error(err);
       });
 
-    console.log("Message sent: %s", info.messageId);
+    Logger("Message sent: %s", info.messageId);
   }
   async Order(
     listProduct = [],
@@ -321,7 +322,7 @@ class MailService {
         throw new Error(err);
       });
 
-    console.log("Message sent: %s", info.messageId);
+    Logger("Message sent: %s", info.messageId);
   }
 }
 

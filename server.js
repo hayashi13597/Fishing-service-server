@@ -96,7 +96,7 @@ app.get("/", async (req, res) => {
 initRoute(app);
 
 app.get("/", (req, res) => {
-  res.send("Hello Backend sadsa ");
+  res.send("Hello");
 });
 app.listen(PORT, () => {
   console.log("start sever PORT: ", PORT);
