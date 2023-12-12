@@ -9,7 +9,6 @@ GET {{domain}}/user/dashboard
 Authorization: "Bear  asdsa dsa"
 Content-Type: application/json
 
-
 ###  Đăng ký tài khoản mới
 POST {{domain}}/user/register
 Content-Type: application/json
