@@ -16,14 +16,15 @@ class CategoryServices {
     );
   }
   async GetOne(id) {
-    const category = await CategoryModal.findByPk(id, {
-      include: [
-        {
-          model: UserModel,
-          attributes: ["id", "fullname", "avatar", "role"],
-        },
-      ],
-    });
+    const category =
+      (await CategoryModal.findByPk(id, {
+        include: [
+          {
+            model: UserModel,
+            attributes: ["id", "fullname", "avatar", "role"],
+          },
+        ],
+      })) || "";
     if (!category) {
       throw new Error("Danh mục không tồn tại");
     }

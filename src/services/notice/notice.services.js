@@ -8,7 +8,7 @@ class NoticeServices {
       { isSee: isSee },
       {
         where: {
-          receiver_id,
+          [Op.or]: [{ receiver_id: receiver_id }, { user_id: receiver_id }],
         },
       }
     );

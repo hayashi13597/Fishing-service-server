@@ -103,11 +103,11 @@ class ProductServices {
             attributes: ["id", "name", "slug"],
           },
         ],
-        limit: 6,
+        limit: 8,
         order: [["sales", "DESC"]],
       }),
       ProductModal.findAll({
-        limit: 6,
+        limit: 8,
         include: [
           {
             model: CategoryModal,
@@ -122,7 +122,7 @@ class ProductServices {
         order: [["createdAt", "DESC"]],
       }),
       ProductModal.findAll({
-        limit: 6,
+        limit: 8,
         include: [
           {
             model: CategoryModal,
@@ -135,7 +135,7 @@ class ProductServices {
         order: [["createdAt", "DESC"]],
       }),
       EventModal.findAll({
-        limit: 8,
+        limit: 10,
         include: [
           {
             model: UserModel,

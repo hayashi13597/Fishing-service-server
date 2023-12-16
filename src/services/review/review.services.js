@@ -5,6 +5,8 @@ import ProductModal from "../../models/product.model";
 import Util from "../../utils";
 import CategoryModal from "../../models/cate.model";
 import UserModel from "../../models/user.model";
+import OrderModal from "../../models/order.model";
+import { Op } from "sequelize";
 class ReviewServices {
   async GetAll(limit, skip) {
     const listReview = await ReviewModal.findAll({
@@ -270,10 +272,28 @@ class ReviewServices {
     );
   }
   async GetDetailListReview(accountId, limit, skip) {
+    let listIdOrder = [];
+
+    try {
+      let listorderSuccess = await OrderModal.findAll({
+        where: {
+          status: "s4",
+          user_id: accountId,
+        },
+        attributes: ["id"],
+      });
+      listorderSuccess = Util.coverDataFromSelect(listorderSuccess) || [];
+
+      listIdOrder = listorderSuccess?.map((item) => item.id);
+    } catch {}
+
     const listReview = await ReviewModal.findAll({
       where: {
         user_id: accountId,
         status: false,
+        order_id: {
+          [Op.in]: listIdOrder,
+        },
       },
       include: [
         {
@@ -300,9 +320,12 @@ class ReviewServices {
       where: {
         user_id: accountId,
         status: false,
+        order_id: {
+          [Op.in]: listIdOrder,
+        },
       },
     });
-    Logger("ge tlist oke");
+    Logger("GEtlist order oke");
     return DataResponse(
       { reviews: listReview, total },
       200,

@@ -216,7 +216,7 @@ class EventService {
             content: `${infoEvemt.description}`,
             receiver_id: "all",
             user_id: infoEvemt.user_id,
-            isSee: false,
+            isSee: true,
           },
           "/tin-tuc/" + slug
         );

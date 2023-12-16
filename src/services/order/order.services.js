@@ -189,6 +189,7 @@ class OrderServices {
         user_id: order.user_id,
         product_id: item.id,
         quantity: item.quantity,
+        order_id: CreateOrder.id,
       });
     });
     try {

@@ -51,14 +51,14 @@ class UserService {
 
     account = Util.coverDataFromSelect(account);
 
-    await CreateNotice({
+    await {
       title: "Thông báo đăng ký tài khoản",
       content:
         "Chúc mừng thành viên mới gia nhập vào câu lạc bộ câu cá Ốc đảo!",
       receiver_id: account.id,
       user_id: account.id,
       isSee: true,
-    });
+    };
 
     const notices = await NoticeModal.findAll(
       {
