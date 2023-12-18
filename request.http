@@ -1,5 +1,5 @@
 
-@domain= fishing-service-server-production-dc10.up.railway.app/
+@domain= http://localhost:5000/
 
 ###  lấy tất cả tài khoảng
 GET {{domain}}/user
@@ -396,6 +396,20 @@ GET   {{domain}}/order/3
 Content-Type: application/json
 
 
+###
+GET   {{domain}}order/detail?id=7&limit=3&skip=0
+Content-Type: application/json
+Authorization:  Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJlbWFpbCI6Im5hbWFuaHRoYW81OEBnbWFpbC5jb20iLCJpYXQiOjE3MDI3MTMyOTUsImV4cCI6MTcwMjk3MjQ5NX0.lGmauimK35lkyqnl-_4g3Z1F4JjlFHo3BnQsXTTL2GQ
+
+{
+   "data":  {
+    "id": 7,
+    "limit":7,
+    "skip": 0
+
+   
+   }
+}
 //------------------------------------------------ Event ---------------------------------------------------------------
 
 ### Lấy tất cả Sự kiện

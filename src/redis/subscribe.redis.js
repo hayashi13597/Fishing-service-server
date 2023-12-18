@@ -10,58 +10,56 @@ const subscriber = createClient({
   },
 });
 (async () => {
-  try{
- await subscriber.connect();
- subscriber.subscribe("order", (message, channel) => {
-   Logger(`message: ${message} with channel: ${channel}`);
- });
+  try {
+    await subscriber.connect();
+    subscriber.subscribe("order", (message, channel) => {
+      Logger(`message: ${message} with channel: ${channel}`);
+    });
 
- subscriber.subscribe("misspassword", async (message, channel) => {
-   Logger(`message: ${message} with channel: ${channel}`);
-   const { email, code } = JSON.parse(message);
-   await MailService.missPssword(email, code);
- });
+    subscriber.subscribe("misspassword", async (message, channel) => {
+      Logger(`message: ${message} with channel: ${channel}`);
+      const { email, code } = JSON.parse(message);
+      await MailService.missPssword(email, code);
+    });
 
- subscriber.subscribe("sendmailregister", async (message, channel) => {
-   const { email, createdAt } = JSON.parse(message);
-   await MailService.register(email, createdAt);
-   Logger(`message: ${message} with channel: ${channel}`);
- });
+    subscriber.subscribe("sendmailregister", async (message, channel) => {
+      const { email, createdAt } = JSON.parse(message);
+      await MailService.register(email, createdAt);
+      Logger(`message: ${message} with channel: ${channel}`);
+    });
 
- subscriber.subscribe("formcontact", async (message, channel) => {
-   const { email, fullname, phone } = JSON.parse(message);
-   await MailService.FormContact(email, fullname, phone);
-   Logger(`message: ${message} with channel: ${channel}`);
- });
- subscriber.subscribe("SendContentContact", async (message, channel) => {
-   const { email, title = "Trả lời liên hệ", content } = JSON.parse(message);
-   await MailService.MailContact(email, title, content);
-   Logger(`message: ${message} with channel: ${channel}`);
- });
- subscriber.subscribe("order", async (message, channel) => {
-   const {
-     listProduct = [],
-     email,
-     total,
-     address,
-     payment_method,
-     shipping_fee,
-     code,
-   } = JSON.parse(message);
-   await MailService.Order(
-     listProduct,
-     email,
-     total,
-     address,
-     payment_method,
-     shipping_fee,
-     code
-   );
-   Logger(` with channel: ${channel}`);
- });
-
-  }catch{
-
-  }
- 
+    subscriber.subscribe("formcontact", async (message, channel) => {
+      const { email, fullname, phone } = JSON.parse(message);
+      await MailService.FormContact(email, fullname, phone);
+      Logger(`message: ${message} with channel: ${channel}`);
+    });
+    subscriber.subscribe("SendContentContact", async (message, channel) => {
+      const { email, title = "Trả lời liên hệ", content } = JSON.parse(message);
+      await MailService.MailContact(email, title, content);
+      Logger(`message: ${message} with channel: ${channel}`);
+    });
+    subscriber.subscribe("order", async (message, channel) => {
+      const {
+        listProduct = [],
+        email,
+        total,
+        address,
+        payment_method,
+        shipping_fee,
+        code,
+        discount = 0,
+      } = JSON.parse(message);
+      await MailService.Order(
+        listProduct,
+        email,
+        total,
+        address,
+        payment_method,
+        shipping_fee,
+        code,
+        discount
+      );
+      Logger(` with channel: ${channel}`);
+    });
+  } catch {}
 })();

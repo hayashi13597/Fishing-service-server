@@ -49,7 +49,7 @@ ProductModal.hasMany(ReviewModal, {
   foreignKey: { name: "product_id", allowNull: true },
 });
 
-OrderModal.belongsTo(ReviewModal, {
+OrderModal.hasMany(ReviewModal, {
   foreignKey: { name: "order_id", allowNull: true },
 });
 

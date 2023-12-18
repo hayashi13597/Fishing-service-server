@@ -1,5 +1,5 @@
 import moment from "moment";
-import { DataResponse } from "../../middlewares";
+import { DataResponse, Logger } from "../../middlewares";
 import DiscountModel from "../../models/discount.model";
 import OrderModal from "../../models/order.model";
 import OrderDetailModal from "../../models/orderDetail.modal";
@@ -115,7 +115,7 @@ class OrderServices {
       where: {
         user_id,
       },
-      order: [["updatedAt", "DESC"]],
+
       limit: limit * 1,
       offset: skip * 1,
     });
@@ -135,8 +135,15 @@ class OrderServices {
       throw new Error("Tài khoản không tồn tại");
     }
     account = Util.coverDataFromSelect(account);
-    const { fullname, address, phone, total, payment_method, shipping_fee } =
-      order;
+    const {
+      fullname,
+      address,
+      phone,
+      total,
+      payment_method,
+      shipping_fee = 0,
+      discount_id = "",
+    } = order;
     if (!fullname || !address || !phone) {
       throw new Error("Dữ liệu bị thiếu");
     }
@@ -151,19 +158,22 @@ class OrderServices {
       throw new Error("Chưa có đơn hàng nào");
     }
 
-    if (order.discount_id) {
-      const findDiscount = await DiscountModel.findByPk(order.discount_id);
+    if (discount_id) {
+      const findDiscount = await DiscountModel.findOne({
+        where: {
+          code: discount_id,
+        },
+      });
 
-      if (!findDiscount) {
-        delete order.discount_id;
-      } else {
-        order.discount_id = findDiscount.id;
+      if (findDiscount?.id) {
         order.discount = findDiscount.value;
-        DiscountModel.update(
+        order.discount_id = findDiscount.id;
+
+        await DiscountModel.update(
           { status: true },
           {
             where: {
-              id: order.discount_id,
+              id: findDiscount.id,
             },
           }
         );
@@ -172,9 +182,10 @@ class OrderServices {
       delete order.discount_id;
     }
     order.codebill = Util.GenerateDiscountCode(10);
-    const CreateOrder = await OrderModal.create(order);
-
-    if (!CreateOrder) throw new Error("Tạo hóa đơn không thành công");
+    let CreateOrder = await OrderModal.create(order);
+    CreateOrder = Util.coverDataFromSelect(CreateOrder);
+    Logger("CreateOrder", CreateOrder);
+    if (!CreateOrder?.id) throw new Error("Tạo hóa đơn không thành công");
     const listOrderDetail = [];
 
     order_detail.forEach(async (item) => {
@@ -192,6 +203,7 @@ class OrderServices {
         order_id: CreateOrder.id,
       });
     });
+
     try {
       RedisServer.publish(
         "order",
@@ -203,6 +215,7 @@ class OrderServices {
           payment_method,
           shipping_fee,
           code: CreateOrder?.codebill,
+          discount: CreateOrder?.discount || 0,
         })
       );
     } catch (error) {}

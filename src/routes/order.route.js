@@ -7,6 +7,7 @@ const OrderRouter = express.Router();
 
 OrderRouter.get(
   "/detail",
+  MiddleWare.handleTryCate(AccuracyPerson.Authentication),
   MiddleWare.handleTryCate(OrderController.GetListOrderClient)
 )
   .get("/", MiddleWare.handleTryCate(OrderController.GetAllOrderAdmin))

@@ -198,13 +198,14 @@ class MailService {
     address,
     payment_method,
     shipping_fee,
-    code
+    code,
+    discount
   ) {
     const info = await transporter
       .sendMail({
-        from: `"${EmailSend} 👻" <${EmailSend}>`, //Địa chỉ gửi
+        from: EmailSend, //Địa chỉ gửi
         to: `${email}`, //  danh sách người nhận
-        subject: `Đơn hàng chi tiết của bạn `, // Tiêu đề
+        subject: `Thông tin đơn hàng của bạn 🎣`, // Tiêu đề
         text: "Thư liên hệ", // plain text body
         html: ` <div
       style="
@@ -298,14 +299,17 @@ class MailService {
         </tbody>
       </table>
 
-      <p style="font-weight: bold">Tổng cộng:   ${formatMoney(total)}</p>
+    
 
       <div style="margin-top: 20px">
         <p>Phương thức thanh toán: ${payment_method}</p>
         <p>Phí vận chuyển: ${formatMoney(shipping_fee)}</p>
+        ${discount ? `  <p>Giảm giá: ${discount} %</p>` : ""}
+      
         <p>Địa chỉ: ${address}</p>
       </div>
 
+  <p style="font-weight: bold">Tổng cộng thanh toán:   ${formatMoney(total)}</p>
       <footer style="margin-top: 20px; text-align: center; color: #888">
         Cảm ơn bạn đã sử dụng dịch vụ của chúng tôi. <br />
       </footer>
