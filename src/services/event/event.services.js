@@ -202,14 +202,14 @@ class EventService {
     return DataResponse(
       { listTopNews, listNewHot, listEventHost, listNewNew, listEventNews },
       200,
-      `Lấy danh sách vie tin tức thành công`
+      `Lấy danh sách  tin tức thành công`
     );
   }
   async Create(infoEvemt) {
     const slug = coverSlug(infoEvemt.title);
     let EventItems = {};
     try {
-      if (infoEvemt.isEvent) {
+      if (infoEvemt?.isEvent) {
         CreateNotice(
           {
             title: `Thông báo sự kiện ${infoEvemt.title}`,

@@ -19,6 +19,7 @@ const EventModal = sequelize.define(
     },
     description: {
       type: DataTypes.TEXT,
+      defaultValue: "",
       allowNull: false,
     },
     imageUrl: {

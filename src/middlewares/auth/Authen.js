@@ -19,7 +19,7 @@ class AccuracyPerson {
           },
         });
         account = Util.coverDataFromSelect(account);
-        if (!account.visiable) {
+        if (!account?.visiable) {
           throw new Error("Tài khoản đã bị khóa");
         } else if (account.id) {
           next();
@@ -49,7 +49,7 @@ class AccuracyPerson {
           },
         });
         account = Util.coverDataFromSelect(account);
-        if (!account.visiable) {
+        if (!account?.visiable) {
           throw new Error("Tài khoản bị khóa");
         } else if (account && account.permission !== "member") {
           next();

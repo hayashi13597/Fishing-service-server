@@ -30,7 +30,6 @@ class OrderController {
     res.status(201).json(data);
   }
   async DeleteOrder(req, res) {
-    imageUrl;
     const { id } = req.params;
     const data = await OrderServices.DeleteOrder(id);
     res.status(200).json(data);

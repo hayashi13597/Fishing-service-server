@@ -12,7 +12,7 @@ const NoticeModal = sequelize.define(
       defaultValue: "",
     },
     content: {
-      type: DataTypes.STRING,
+      type: DataTypes.TEXT,
       allowNull: false,
     },
     receiver_id: {

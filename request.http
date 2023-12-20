@@ -1,5 +1,5 @@
 
-@domain= http://localhost:5000/
+@domain= https://fishing-service-server-production-dc10.up.railway.app
 
 ###  lấy tất cả tài khoảng
 GET {{domain}}/user
